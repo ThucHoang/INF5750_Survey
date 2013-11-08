@@ -5,12 +5,17 @@
 <body>
 <p id="navbar-text">Yo! </p>
 
-<form>
+<form role="form">
+	<div class="form-group">
 Select program: <select id="dataElementList"></select>
+</div>
+<div class="form-group">
 Select stages: <select id="programStagesElementList"></select>
+</div>
+<button id="getSurveyButton" target="#">Get survey</button>
 </form>
 
-<table id="dataElementTable"></table>
+<table class="table table-hover" id="dataElementTable"></table>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -25,13 +30,7 @@ Select stages: <select id="programStagesElementList"></select>
 </script>
 <script>
 $("#dataElementList").change(function() {
-	getProgramStages($(this).val());
-});
-
-$("#programStagesElementList").change(function() {
-	if($("#programStagesElementList").size() >= 1) {
-		getDataElements($(this).val());
-	}
+	getProgramStages();
 });
 </script>
 </body></html>

@@ -43,8 +43,9 @@ function populateProgramList(json) {
 	//$('#programStagesElementList').append('<option value="#">Select one of the stages...</option>');
 }
 
-function getProgramStages(id) {
-	var programStageUrl = 'http://apps.dhis2.org/demo/api/programs/' + id + '.json';
+function getProgramStages() {
+	var psId = $('#dataElementList').val();
+	var programStageUrl = 'http://apps.dhis2.org/demo/api/programs/' + psId + '.json';
 	console.log("Programstage: " + programStageUrl);
 
 	$.ajax({
@@ -64,10 +65,16 @@ function populateProgramStageList(json) {
 		programStageListFormString += '<option value="' + value.id + '">' + value.name + '</option>';
 	});
 	$('#programStagesElementList').append(programStageListFormString);
+
+	$('#getSurveyButton').on('click', function(e) {
+		e.preventDefault();
+	getDataElements();
+	});
 }
 
-function getDataElements(id) {
-	var dataElementsUrl = 'http://apps.dhis2.org/demo/api/programStages/' + id + '.json';
+function getDataElements() {
+	var deId = $('#programStagesElementList').val();
+	var dataElementsUrl = 'http://apps.dhis2.org/demo/api/programStages/' + deId + '.json';
 	console.log("Data elements: " + dataElementsUrl);
 
 	$.ajax({
@@ -82,12 +89,10 @@ function getDataElements(id) {
 }
 
 function populateDataElementList(json) {
-	$('#dataElementTable').empty();
-	var dataElementListTableString = '<tr>';
+	var dataElementListTableString = '<tr><td>Name</td><td>ID</td>';
 
 	$.each(json.programStageDataElements, function(index, value) {
-		dataElementListTableString += '<td>' + value.name + '</td><td>' + value.id + '</td>'; 
+		dataElementListTableString += '<tr><td>' + value.dataElement.name + '</td><td>' + value.dataElement.id + '</td></tr>'; 
 	})
-	dataElementListTableString += '</tr>';
 	$('#dataElementTable').append(dataElementListTableString);
 }
