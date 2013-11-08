@@ -1,14 +1,37 @@
 <html><head><title></title>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
 <head/>
 <body>
-Fletching data...!<br /><br />
-<div id="dataSets"></div>
+<p id="navbar-text">Yo! </p>
 
+<form>
+Select program: <select id="dataElementList"></select>
+Select stages: <select id="programStagesElementList"></select>
+</form>
+
+<table id="dataElementTable"></table>
+
+<!-- Latest compiled and minified JavaScript -->
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 <script src="js/dataFetching.js"></script>
 <script>
-//window.onload=getUserData();
-window.onload=getDataSets();
-	</script>
+		$(document).ready(function() {
+			getUserData();
+			getDataSets();
+		});
+</script>
+<script>
+$("#dataElementList").change(function() {
+	getProgramStages($(this).val());
+});
+
+$("#programStagesElementList").change(function() {
+	if($("#programStagesElementList").size() >= 1) {
+		getDataElements($(this).val());
+	}
+});
+</script>
 </body></html>
