@@ -7,11 +7,8 @@ function getUserData() {
 		contentType: "application/json",
 		dataType: 'json'
 	}).success(function(data) {
-		var userLoggedIn = 'Currently logged in as ' + data.name + ' (' + data.birthday + ')';
-		$('#navbar-text').append(userLoggedIn);
-		console.log(userLoggedIn);
-		console.log("Bruker: " + data.name);
-		console.log("Bursdag: " + data.birthday);
+		var userLoggedIn = 'Currently logged in as ' + data.organisationUnits[0].name + '/<b>' + data.name + '</b> (' + data.email + ')';
+		$('#loginInfo').append(userLoggedIn);
 	}).error(function(data) {
 		console.log("Error...");
 	})
@@ -20,6 +17,7 @@ function getUserData() {
 function getDataSets() {
 	var url = 'http://apps.dhis2.org/demo/api/programs.json';
 	console.log("Henter data fra: " + url);
+
 	$.ajax({
 		url: url,
 		contentType: "application/json",
@@ -29,22 +27,33 @@ function getDataSets() {
 	}).error(function(data) {
 		console.log("DATASET ERROR " + data);
 	})
-	};
-	
+};
+
 function populateProgramList(json) {
-	var programListFormString = '<option value="#">Select one of the programs...</option>';
+	$('#dataElementTable').empty();
+	var programListFormString = new String();
+
 	$.each(json.programs, function(index, value) {
 		if(value.kind == 'SINGLE_EVENT_WITHOUT_REGISTRATION') {
-		programListFormString += '<option value="' + value.id + '">' + value.name + '</option>';
-			console.log(index + ": " + value.name + " & " + value.id);
-			}
-		});
+			programListFormString += '<li><a href="#" data-id="' + value.id + '">' + value.name + '</a></li>';
+		}
+	});
+
 	$('#dataElementList').append(programListFormString);
+	$('#dataElementList li a').click(function() {
+		$('#program button').text($(this).text());
+		getProgramStages();
+		console.log($(this));
+	});
 	//$('#programStagesElementList').append('<option value="#">Select one of the stages...</option>');
 }
 
 function getProgramStages() {
-	var psId = $('#dataElementList').val();
+	console.log($('dataElementList'));
+	// hente ut id (data)
+	// hent navn til valg, sett til $('#program button').text(name);
+	var psId = $('#dataElementList li a').attr('data-id');
+	console.log(psId);
 	var programStageUrl = 'http://apps.dhis2.org/demo/api/programs/' + psId + '.json';
 	console.log("Programstage: " + programStageUrl);
 
@@ -60,20 +69,39 @@ function getProgramStages() {
 } 
 
 function populateProgramStageList(json) {
-	var programStageListFormString = new String();
-	$.each(json.programStages, function(index, value) {
-		programStageListFormString += '<option value="' + value.id + '">' + value.name + '</option>';
-	});
-	$('#programStagesElementList').append(programStageListFormString);
+	$('#programStagesElementList').empty();
+	var programStageListString = new String();
+	var options = json.programStages.length;
 
-	$('#getSurveyButton').on('click', function(e) {
-		e.preventDefault();
-	getDataElements();
-	});
+	console.log(json.programStages.length);
+	if(options == 1) {
+		document.getElementById('stage').style.display = 'inline';
+		// hent navn til valg, sett til $('#stage button').text(json.programStages[0].name);
+		getDataElementsWithId(json.programStages[0].id);
+	}
+	else if(options > 1) {
+
+		$.each(json.programStages, function(index, value) {
+			programStageListString += '<li><a href="#" data-id="' + value.id + '">' + value.name + '</a></li>';
+		});
+
+		$('programStagesElementList').append(programStageListString);
+		$('#programStagesElementList li a').click(function() {
+			$('#stage button').text($(this).text());
+			getDataElements();
+		})
+		//$('#programStagesElementList').append(programStageListFormString);
+		// append input med tekst select stage
+		// append string to element
+		// add onchange listener
+	}
 }
 
 function getDataElements() {
-	var deId = $('#programStagesElementList').val();
+	getDataElementsWithId($('#programStagesElementList li a').attr('data-id'));
+}
+
+function getDataElementsWithId(deId) {
 	var dataElementsUrl = 'http://apps.dhis2.org/demo/api/programStages/' + deId + '.json';
 	console.log("Data elements: " + dataElementsUrl);
 
@@ -89,6 +117,7 @@ function getDataElements() {
 }
 
 function populateDataElementList(json) {
+	$('#dataElementTable').empty();
 	var dataElementListTableString = '<tr><td>Name</td><td>ID</td>';
 
 	$.each(json.programStageDataElements, function(index, value) {

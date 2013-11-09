@@ -1,36 +1,62 @@
-<html><head><title></title>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
+<html><head>
+<title>Dhis2 > Survey</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/bootstrap-theme.css">
 <head/>
 <body>
-<p id="navbar-text">Yo! </p>
+	<nav class="navbar navbar-default" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+			</button>
+			<a class="navbar-brand" href="#">N.E.T Survey</a>
+		</div>
 
-<form role="form">
-	<div class="form-group">
-Select program: <select id="dataElementList"></select>
-</div>
-<div class="form-group">
-Select stages: <select id="programStagesElementList"></select>
-</div>
-<button id="getSurveyButton" target="#">Get survey</button>
-</form>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#" id="skip-logic">Dashboard</a></li>
+				<li><a href="#" id="skip-logic">Skip-logic</a></li>
+				<li><a href="#" id="survey">Answer survey</a></li>
+			</ul>
+			<p class="navbar-text navbar-right" id="loginInfo"></p>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+	<table><tr><td>
+		<div id="program" class="btn-group">
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+				Select program	
+			</button>
+			<ul id="dataElementList" class="dropdown-menu" role="menu">
+			</ul>
+		</div>
+	</td><td>
+	<div id="stage" class="btn-group" style="display:none;">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			Select stage
+		</button>
+		<ul id="programStagesElementList" class="dropdown-menu" role="menu">
+		</ul>
+	</div></td>
 
-<table class="table table-hover" id="dataElementTable"></table>
+	<table class="table table-hover" id="dataElementTable"></table>
+	<div id="container"></div>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="js/dataFetching.js"></script>
+	<script>
+	$(document).ready(function() {
+		getUserData();
+		getDataSets();
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-<script src="js/dataFetching.js"></script>
-<script>
-		$(document).ready(function() {
-			getUserData();
-			getDataSets();
+		$("#dataElementList").change(function() {
+			getProgramStages();
 		});
-</script>
-<script>
-$("#dataElementList").change(function() {
-	getProgramStages();
-});
-</script>
-</body></html>
+	});
+	</script>
+</body>
+</html>
