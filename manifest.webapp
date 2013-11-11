@@ -1,0 +1,16 @@
+{
+	"version": "0.1",
+	"name": "Yoyo",
+	"description": "Gangstars app",
+	"launch_path": "/index.html",
+	"developer": {
+		"name": "Me",
+		"url": "http://me.com"
+	},
+	"default_locale": "en",
+	"activities": {
+		"dhis": {
+			"href": "*"
+		}
+	}
+}
