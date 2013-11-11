@@ -4,7 +4,7 @@
 	"description": "NET Survey App",
 	"launch_path": "/index.html",
 	"icons": {
-		"64": "/img/net_logo.png"
+		"48": "/img/net_logo.png"
 	},
 	"developer": {
 		"name": "NET",
