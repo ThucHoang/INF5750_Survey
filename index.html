@@ -1,5 +1,12 @@
+<!--
+	/*	
+	 * Created by Thuc Hoang and Nguyen Cong Nguyen
+	 *
+	 * Main page for navigation of the survey
+-->
+
 <html><head>
-<title>Dhis2 > Survey</title>
+<title>N.E.T Survey</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/bootstrap.css">
@@ -7,54 +14,43 @@
 <head/>
 <body>
 	<nav class="navbar navbar-default" role="navigation">
-		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 				<span class="sr-only">Toggle navigation</span>
 			</button>
 			<a class="navbar-brand" href="#">N.E.T Survey</a>
 		</div>
-
-		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="#" id="skip-logic">Dashboard</a></li>
-				<li><a href="#" id="skip-logic">Skip-logic</a></li>
-				<li><a href="#" id="survey">Answer survey</a></li>
+			<ul class="nav navbar-nav" id="menu-bar">
+				<li class="active"><a href="#" id="dashboard">Dashboard</a></li>
+				<li><a href="#" id="skip-logic">Create skip-logic</a></li>
+				<li><a href="#" id="program">Programs</a></li>
 			</ul>
 			<p class="navbar-text navbar-right" id="loginInfo"></p>
-		</div><!-- /.navbar-collapse -->
-	</nav>
-	<table><tr><td>
-		<div id="program" class="btn-group">
-			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-				Select program	
-			</button>
-			<ul id="dataElementList" class="dropdown-menu" role="menu">
-			</ul>
 		</div>
-	</td><td>
-	<div id="stage" class="btn-group" style="display:none;">
-		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-			Select stage
-		</button>
-		<ul id="programStagesElementList" class="dropdown-menu" role="menu">
-		</ul>
-	</div></td>
-
-	<table class="table table-hover" id="dataElementTable"></table>
-	<div id="container"></div>
+	</nav>
+	<div class="container" id="content"></div>
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="js/jquery-2.0.3.js"></script>
 	<script src="js/bootstrap.js"></script>
-	<script src="js/dataFetching.js"></script>
-	<script>
-	$(document).ready(function() {
-		getUserData();
-		getDataSets();
 
-		$("#dataElementList").change(function() {
-			getProgramStages();
+	<!-- Our own JS files -->
+	<script src="js/hostcheck.js"></script>
+	<script src="js/dataFetching.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		
+		getUserData();
+		$('#dashboard').click(function(){
+			$('#content').load("pages/dashboard.html");
+		});
+
+		$('#skip-logic').click(function(){
+			$('#content').load("pages/skiplogic.html");
+		});
+
+		$('#program').click(function(){
+			$('#content').load("pages/program.html");
 		});
 	});
 	</script>

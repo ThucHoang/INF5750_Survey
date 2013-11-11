@@ -1,0 +1,25 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Programs</title>
+</head>
+<body>
+		<div id="program" class="btn-group">
+			<form role="form">
+				Select program: <select id="formSelector"></select>
+		</div>
+	<table class="table table-hover" id="dataElementTable"></table>
+
+	<script src="js/hostcheck.js"></script>
+	<script src="js/dataFetching.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		getDataSets();
+
+		$("#formSelector").change(function() {
+			getProgramStages();
+		});
+	});
+	</script>
+</body>
+</html>

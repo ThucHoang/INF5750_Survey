@@ -1,5 +1,12 @@
+/*
+ * Created by Thuc Hoang and Nguyen Cong Nguyen
+ *
+ * Fetching data from DHIS2 (if localhost it will fetch data from pre-saved json files)
+ */
+
 function getUserData() {
-	var userUrl = 'http://apps.dhis2.org/demo/api/me';
+	$('#loginInfo').empty();
+	var userUrl = getHost() + '/api/me.json';
 	console.log("Henter brukerdata fra: " + userUrl);
 
 	$.ajax({
@@ -15,7 +22,7 @@ function getUserData() {
 }
 
 function getDataSets() {
-	var url = 'http://apps.dhis2.org/demo/api/programs.json';
+	var url = getHost() + '/api/programs.json';
 	console.log("Henter data fra: " + url);
 
 	$.ajax({
@@ -30,31 +37,33 @@ function getDataSets() {
 };
 
 function populateProgramList(json) {
-	$('#dataElementTable').empty();
+	$('#formSelector').empty();
 	var programListFormString = new String();
 
 	$.each(json.programs, function(index, value) {
-		if(value.kind == 'SINGLE_EVENT_WITHOUT_REGISTRATION') {
-			programListFormString += '<li><a href="#" data-id="' + value.id + '">' + value.name + '</a></li>';
+		if(value.type == 3) {
+		programListFormString += '<option value="' + value.id + '">' + value.name + '</option>';
+		//programListFormString += '<li><a href="#" data-id="' + value.id + '">' + value.name + '</a></li>';
 		}
 	});
-
-	$('#dataElementList').append(programListFormString);
+	$('#formSelector').append(programListFormString);
+}
+	/*
 	$('#dataElementList li a').click(function() {
 		$('#program button').text($(this).text());
-		getProgramStages();
-		console.log($(this));
-	});
+		getProgramStages($(this).text());
+	}); 
 	//$('#programStagesElementList').append('<option value="#">Select one of the stages...</option>');
 }
-
+*/
 function getProgramStages() {
-	console.log($('dataElementList'));
+	var selectedProgram = document.getElementById("formSelector").selectedIndex;
+	var allPrograms = document.getElementById("formSelector").options;
 	// hente ut id (data)
 	// hent navn til valg, sett til $('#program button').text(name);
-	var psId = $('#dataElementList li a').attr('data-id');
-	console.log(psId);
-	var programStageUrl = 'http://apps.dhis2.org/demo/api/programs/' + psId + '.json';
+	//var psId = $('#dataElementList li a').attr('data-id');
+	//console.log(psId);
+	var programStageUrl = getHost() + '/api/programs/' + allPrograms[selectedProgram].value + '.json';
 	console.log("Programstage: " + programStageUrl);
 
 	$.ajax({
@@ -62,47 +71,14 @@ function getProgramStages() {
 		contentType: 'application/json',
 		dataType: 'json'
 	}).success(function(data) {
-		populateProgramStageList(data);
+		getDataElements(data.programStages[0].id);
 	}).error(function(data) {
 		console.log("PROGRAMSTAGE ERROR");
 	})
 } 
 
-function populateProgramStageList(json) {
-	$('#programStagesElementList').empty();
-	var programStageListString = new String();
-	var options = json.programStages.length;
-
-	console.log(json.programStages.length);
-	if(options == 1) {
-		document.getElementById('stage').style.display = 'inline';
-		// hent navn til valg, sett til $('#stage button').text(json.programStages[0].name);
-		getDataElementsWithId(json.programStages[0].id);
-	}
-	else if(options > 1) {
-
-		$.each(json.programStages, function(index, value) {
-			programStageListString += '<li><a href="#" data-id="' + value.id + '">' + value.name + '</a></li>';
-		});
-
-		$('programStagesElementList').append(programStageListString);
-		$('#programStagesElementList li a').click(function() {
-			$('#stage button').text($(this).text());
-			getDataElements();
-		})
-		//$('#programStagesElementList').append(programStageListFormString);
-		// append input med tekst select stage
-		// append string to element
-		// add onchange listener
-	}
-}
-
-function getDataElements() {
-	getDataElementsWithId($('#programStagesElementList li a').attr('data-id'));
-}
-
-function getDataElementsWithId(deId) {
-	var dataElementsUrl = 'http://apps.dhis2.org/demo/api/programStages/' + deId + '.json';
+function getDataElements(id) {
+	var dataElementsUrl = getHost() + '/api/programStages/' + id + '.json';
 	console.log("Data elements: " + dataElementsUrl);
 
 	$.ajax({
@@ -125,3 +101,48 @@ function populateDataElementList(json) {
 	})
 	$('#dataElementTable').append(dataElementListTableString);
 }
+/*
+function getDataElements(id) {
+	var datael = 'http://apps.dhis2.org/demo/api/dataElements/' + id + '.json';
+	console.log("DataElements: ") + datael;
+
+	$.ajax({
+		url: datael,
+		contentType: 'application/json',
+		dataType: 'json'
+	}).success(function(data) {
+		populateDataElements(data);
+	}).error(function(data) {
+		console.log("DataElements ERROR!");
+	})
+}
+
+function populateDataElements(json) {
+	console.log(json.name);
+	if(json.optionSet != null) {
+		getOptionSets(json.optionSet.id);
+	}
+}
+
+function getOptionSets(id) {
+	var optionSetUrl = 'http://apps.dhis2.org/demo/api/optionSets/' + id + '.json';
+	console.log("OptionSet: " + optionSetUrl);
+
+	$.ajax({
+		url: optionSetUrl,
+		contentType: 'application/json',
+		dataType: 'json'
+	}).success(function(data) {
+		populateOptionSetList(data);
+	}).error(function(data) {
+		console.log("OptionSets ERROR!");
+	})
+}
+
+function populateOptionSetList(json) {
+	if(json.name == "Gender") {
+		for(var i = 0; i < json.options.length; i++) {
+			console.log(i + ": " + json.options[i]);
+		}	
+	}
+}*/
