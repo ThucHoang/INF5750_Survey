@@ -1,14 +1,16 @@
 {
 	"version": "0.1",
-	"name": "Survey_barebone",
-	"description": "NET Survey App",
+	"name": "Yoyo",
+	"description": "Gangstars app",
 	"launch_path": "/index.html",
 	"icons": {
-		"48": "/img/net_logo.png"
-	},
+        "16": "/img/net_logo.png",
+        "48": "/img/net_logo.png",
+        "128": "/img/net_logo.png"
+    },
 	"developer": {
-		"name": "NET",
-		"url": "https://github.com/ThucHoang/INF5750_Survey"
+		"name": "Me",
+		"url": "http://me.com"
 	},
 	"default_locale": "en",
 	"activities": {

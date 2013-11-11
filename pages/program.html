@@ -7,11 +7,15 @@
 		<div id="program" class="btn-group">
 			<form role="form">
 				Select program: <select id="formSelector"></select>
+			</form>
 		</div>
-	<table class="table table-hover" id="dataElementTable"></table>
-
+	<!-- <table class="table table-hover" id="dataElementTable"></table> -->
+	<div id="dataElementFrom">
+		<form id="formData">
+		</form>
+	</div>
 	<script src="js/hostcheck.js"></script>
-	<script src="js/dataFetching.js"></script>
+	<script src="js/datafetching.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function() {
 		getDataSets();

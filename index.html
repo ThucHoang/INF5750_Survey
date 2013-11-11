@@ -23,6 +23,7 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav" id="menu-bar">
 				<li class="active"><a href="#" id="dashboard">Dashboard</a></li>
+				<!-- TBD: Only show "Create skip-logic" if the user are in the group of superuser/allowed to see logic -->
 				<li><a href="#" id="skip-logic">Create skip-logic</a></li>
 				<li><a href="#" id="program">Programs</a></li>
 			</ul>
@@ -36,10 +37,9 @@
 
 	<!-- Our own JS files -->
 	<script src="js/hostcheck.js"></script>
-	<script src="js/dataFetching.js"></script>
+	<script src="js/datafetching.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function() {
-		
 		getUserData();
 		$('#dashboard').click(function(){
 			$('#content').load("pages/dashboard.html");
