@@ -4,26 +4,43 @@
  * Fetching data from DHIS2 (if localhost it will fetch data from pre-saved json files)
  */
 
+ var bypass = "false";
+
  function getUserData() {
  	$('#loginInfo').empty();
  	var url = getHost() + '/api/me.json';
- 	console.log("Henter brukerdata fra: " + url);
 
  	$.ajax({
  		url: url,
  		contentType: "application/json",
  		dataType: 'json'
  	}).success(function(data) {
- 		var userLoggedIn = 'Currently logged in as ' + data.organisationUnits[0].name + '/<b>' + data.name + '</b> (' + data.email + ')';
- 		$('#loginInfo').append(userLoggedIn);
+ 		checkUserCredentials(data);
+ 		writeLoggedInUser(data);
  	}).error(function(data) {
  		console.log("Error...");
  	})
  }
 
+ function writeLoggedInUser(json) {
+ 	var userLoggedIn = 'Logged in as ' + json.organisationUnits[0].name + '/<b>' + json.name + '</b> (<a href="' + getHost() + '/dhis-web-commons-security/logout.action" target="_self">Logout</a>)';
+ 	$('#loginInfo').append(userLoggedIn);
+ }
+
+ function checkUserCredentials(json) {
+ 	var authGroups = json.userCredentials.userAuthorityGroups;
+ 	for(var i = 0; i < authGroups.length; i++) {
+ 		if(authGroups[i].name != "Superuser" && json.disabled == "false") {
+ 			$('#skip-logic').hide();
+ 		}
+ 		else {
+ 			console.log('SUPERUSER DETECTED! SHOW ALL THE SHIT!');
+ 		}
+ 	}
+ }
+
  function getDataSets() {
  	var url = getHost() + '/api/programs.json';
- 	console.log("Henter data fra: " + url);
 
  	$.ajax({
  		url: url,
@@ -51,25 +68,33 @@
  }
 
  function getProgramStages() {
+ 	bypass = "false";
+ 	$('#alertArea').empty();
+ 	$('#programNameView').empty();
  	var selectedProgram = document.getElementById("formSelector").selectedIndex;
  	var allPrograms = document.getElementById("formSelector").options;
  	var url = getHost() + '/api/programs/' + allPrograms[selectedProgram].value + '.json';
- 	console.log("Programstage: " + url);
 
- 	$.ajax({
- 		url: url,
- 		contentType: 'application/json',
- 		dataType: 'json'
- 	}).success(function(data) {
- 		getDataElements(data.programStages[0].id);
- 	}).error(function(data) {
- 		console.log("PROGRAMSTAGE ERROR");
- 	})
- } 
+ 	if(allPrograms[selectedProgram].value != '#') {
+ 		$.ajax({
+ 			url: url,
+ 			contentType: 'application/json',
+ 			dataType: 'json'
+ 		}).success(function(data) {
+ 			$('#programNameView').append('You have chosen the program: <b>' + data.name + '</b><br /><br />');
+ 			getDataElements(data.programStages[0].id);
+ 		}).error(function(data) {
+ 			console.log("PROGRAMSTAGE ERROR");
+ 		})
+ 	} 
+ 	else {
+ 		$('#formData').empty();
+ 	}
+ }
+
 
  function getDataElements(id) {
  	var url = getHost() + '/api/programStages/' + id + '.json';
- 	console.log("Data elements: " + url);
 
  	$.ajax({
  		url: url,
@@ -78,9 +103,10 @@
  	}).success(function(data) {
  		$('#formData').empty();
  		$.each(data.programStageDataElements, function(index, value) {
- 			$('#formData').append('<p id="' + value.dataElement.id + '"></p>')
+ 			$('#formData').append('<p id="' + value.dataElement.id + '"></p>');
  			getDataElementsInfo(value.dataElement.id);
  		});
+ 		$('#formData').append('<input type="button" class="btn btn-default" value="Submit form" onclick="submitForm()"></input>');
  	}).error(function(data) {
  		console.log("DATAELEMENT ERROR!");
  	})
@@ -88,7 +114,6 @@
 
  function getDataElementsInfo(id) {
  	var url = getHost() + '/api/dataElements/' + id + '.json';
- 	console.log("DataElements: " + id);
 
  	$.ajax({
  		url: url,
@@ -112,21 +137,20 @@
 
  function populateDataElements(json) {
  	var dataElementListFormString = new String();
- 	
+
  	if(json.type == "string" && json.textType == "text") {
- 		$('#' + json.id).append(json.name + ': <input type="text" name="' + json.name + '"><br />');
+ 		$('#' + json.id).append(json.name + ': <input type="text" class="form-control" id="' + json.id + '" name="' + json.name + '">');
  	}
  	if(json.type == "int" && json.numberType == "int") {
- 		$('#' + json.id).append(json.name + ': <input type="number" name="' + json.name + '"><br />');
+ 		$('#' + json.id).append(json.name + ': <input type="number" class="form-control" id="' + json.id + '" name="' + json.name + '">');
  	}
  	if(json.type == "date" && json.numberType == "number") {
- 		$('#' + json.id).append(json.name + ': <input type="date" name="' + json.name + '"><br />');
+ 		$('#' + json.id).append(json.name + ': <input type="date" class="form-control" id="' + json.id + '" name="' + json.name + '">');
  	}
  }
 
  function getOptionSets(json, id) {
  	var optionSetUrl = getHost() + '/api/optionSets/' + id + '.json';
- 	console.log(json.name + " optionSet: " + optionSetUrl);
 
  	$.ajax({
  		url: optionSetUrl,
@@ -140,10 +164,25 @@
  }
 
  function populateOptionSetList(json, data) {
- 	var optionSetListFromString = json.name + ': <select>';
- 	for(var i = 0; i < data.options.length; i++) {
- 		optionSetListFromString += name + ': ' + '<option value="' + i + '">' + data.options[i] + '</option>';
+ 	var optionSetListFromString = json.name + ': <select class="form-control">';
+ 	var optionsAmount = data.options.length;
+ 	if(data.options.length <= 100 || bypass == "true") {
+ 		for(var i = 0; i < optionsAmount; i++) {
+ 			optionSetListFromString += '<div class="form-group">';
+ 			optionSetListFromString += json.name + ': ' + '<option value="' + i + '">' + data.options[i] + '</option>';
+ 			optionSetListFromString += '</div>';
+ 		}
+ 		optionSetListFromString += '</select>';
+ 		$('#' + json.id).append(optionSetListFromString);
  	}
- 	optionSetListFromString += '</select><br />';
- 	$('#' + json.id).append(optionSetListFromString);
+ 	else {
+ 		var alertString = '<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>Warning!!</strong> ' + json.name + ' has too many alternatives (' + optionsAmount + ' options (HOLY!)), we\'ve removed it for your own sake! Click <a href="#" class="alert-link" id="bypass">here</a> if you want to bypass this!</div>';
+ 		$('#alertArea').append(alertString);
+
+ 		$('#bypass').click(function(){
+			bypass = "true";
+			$('#alertArea').empty();
+			populateOptionSetList(json,data);
+		});
+ 	}
  }

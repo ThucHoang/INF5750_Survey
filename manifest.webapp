@@ -1,7 +1,8 @@
 {
-	"version": "0.1",
-	"name": "Yoyo",
-	"description": "Gangstars app",
+	"version": "0.2",
+	"name": "N.E.T Survey",
+	"description": "A webapp created by group N.E.T!",
+	"installs_allowed_from" : [ "*"],
 	"launch_path": "/index.html",
 	"icons": {
         "16": "/img/net_logo.png",
@@ -9,8 +10,9 @@
         "128": "/img/net_logo.png"
     },
 	"developer": {
-		"name": "Me",
-		"url": "http://me.com"
+		"name": "N.E.T",
+		"company": "University of Oslo",
+		"url": "https://wiki.uio.no/mn/ifi/inf5750/index.php/N.E.T_Survey"
 	},
 	"default_locale": "en",
 	"activities": {
