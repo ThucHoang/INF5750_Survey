@@ -45,7 +45,7 @@ var skipLogicArray = [];
  		contentType: 'application/json',
  		dataType: 'json'
  	}).success(function(data) {
- 		dataElementsString += '<select multiple id="allDataElements" size="' + data.programStageDataElements.length + '">';
+ 		dataElementsString += '<select id="allDataElements" size="' + data.programStageDataElements.length + '">';
  		$.each(data.programStageDataElements, function(index, value) {
  			dataElementsString += '<option value="' + value.id + '">' + value.name + '</option>';
  			skipLogicArray[index] = new Array(3);
