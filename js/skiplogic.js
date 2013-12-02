@@ -39,31 +39,33 @@ var skipLogicArray = [];
  	var allPrograms = document.getElementById("programSelect").options;
  	var url = getHost() + '/api/systemSettings/NT.' + allPrograms[selectedProgram].value + '.skiplogic';
  	var dataElementsString = "";
-
- 	$.ajax({
- 		url: url,
- 		contentType: 'application/json',
- 		dataType: 'json'
- 	}).success(function(data) {
- 		dataElementsString += '<select id="allDataElements" size="' + data.programStageDataElements.length + '">';
- 		$.each(data.programStageDataElements, function(index, value) {
- 			dataElementsString += '<option value="' + value.id + '">' + value.name + '</option>';
- 			skipLogicArray[index] = new Array(3);
- 			skipLogicArray[index][0] = value.id;
- 			skipLogicArray[index][1] = value.true;
- 			skipLogicArray[index][2] = value.false;
- 		});
- 		dataElementsString += '</select>';
- 		if(skipLogicArray.length == 0) {
+ 	if(selectedProgram != 0){
+ 		$.ajax({
+ 			url: url,
+ 			contentType: 'application/json',
+ 			dataType: 'json'
+ 		}).success(function(data) {
+ 			dataElementsString += '<select id="allDataElements" size="' + data.programStageDataElements.length + '">';
+ 			$.each(data.programStageDataElements, function(index, value) {
+ 				dataElementsString += '<option value="' + value.id + '">' + value.name + '</option>';
+ 				skipLogicArray[index] = new Array(3);
+ 				skipLogicArray[index][0] = value.id;
+ 				skipLogicArray[index][1] = value.true;
+ 				skipLogicArray[index][2] = value.false;
+ 			});
+ 			dataElementsString += '</select>';
+ 			if(skipLogicArray.length == 0) {
+ 				$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
+ 			}
+ 			else {
+ 				$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
+ 				$('#skipLogicView').append(dataElementsString);
+ 			}
+ 			console.log(dataElementsString);
+ 		}).error(function(data) {
  			$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
- 		}
- 		else {
- 			$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
- 			$('#skipLogicView').append(dataElementsString);
- 		}
- 		console.log(dataElementsString);
- 	}).error(function(data) {
- 		$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
- 		console.log("Fetching skip-logic FAILED!");
- 	});
+ 			console.log("Fetching skip-logic FAILED!");
+ 	});//End of ajax
+ 	}
+ 	
  }
