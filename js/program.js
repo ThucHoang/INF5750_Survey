@@ -105,33 +105,37 @@
  	skipLogicArray = [];
  	dataElementPos = 0;
 
+ 	//Should clear view before fetching data
  	$('#skipLogicAlert').empty();
  	$('#alertArea').empty();
  	$('#programNameView').empty();
  	$('#button').empty();
+ 	$('#formData').text("");
 
  	var selectedProgram = document.getElementById("formSelector").selectedIndex;
  	var allPrograms = document.getElementById("formSelector").options;
  	var url = getHost() + '/api/programs/' + allPrograms[selectedProgram].value + '.json';
  	programID = allPrograms[selectedProgram].value;
+ 	if(selectedProgram != 0){
 
- 	if(allPrograms[selectedProgram].value != '#') {
- 		$.ajax({
- 			url: url,
- 			contentType: 'application/json',
- 			dataType: 'json'
- 		}).success(function(data) {
- 			$('#programNameView').append('You have chosen the program: <b>' + data.name + '</b><br /><br />');
- 			formName = data.name;
- 			JSONStorage = data;
- 			fetchSkipLogic(allPrograms[selectedProgram].value);
- 			getDataElements(data.programStages[0].id);
- 		}).error(function(data) {
- 			console.log("PROGRAMSTAGE ERROR");
- 		});
- 	} 
- 	else {
- 		$('#formData').empty();
+ 		if(allPrograms[selectedProgram].value != '#') {
+ 			$.ajax({
+ 				url: url,
+ 				contentType: 'application/json',
+ 				dataType: 'json'
+ 			}).success(function(data) {
+ 				$('#programNameView').append('You have chosen the program: <b>' + data.name + '</b><br /><br />');
+ 				formName = data.name;
+ 				JSONStorage = data;
+ 				fetchSkipLogic(allPrograms[selectedProgram].value);
+ 				getDataElements(data.programStages[0].id);
+ 			}).error(function(data) {
+ 				console.log("PROGRAMSTAGE ERROR");
+ 			});
+ 		} 
+ 		else {
+ 			$('#formData').empty();
+ 		}
  	}
  }
 
