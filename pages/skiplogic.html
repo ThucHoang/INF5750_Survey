@@ -1,10 +1,27 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Survey</title>
+	<title>Skip Logic</title>
 </head>
 <body>
-<h1>Adminpage for skip logic of programs</h1>
+	<div id="skipLogicStatus"></div>
+	<div class="btn-group">
+		<form role="form">
+			<label>Select program:</label> <select id="programSelect"></select>
+		</form></div>
+	<div id="skipLogicView"></div>
 
+	<!-- Our own JS files -->
+	<script src="js/hostcheck.js"></script>
+	<script src="js/skiplogic.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		getAllPrograms();
+
+		$('#programSelect').change(function() {
+			getSkipLogic();
+		});
+	});
+	</script>
 </body>
 </html>

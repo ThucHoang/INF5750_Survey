@@ -4,6 +4,16 @@
 	<title>Dashboard</title>
 </head>
 <body>
-	<h1>DASHBOARD</h1>
+	<div id="userInformation"></div>
+	
+	<!-- Our own JS files -->
+	<script src="js/hostcheck.js"></script>
+	<script src="js/dashboard.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function() {
+		getUserData();
+	});
+	</script>
 </body>
 </html>

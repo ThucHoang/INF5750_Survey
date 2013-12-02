@@ -4,23 +4,28 @@
 	<title>Programs</title>
 </head>
 <body>
-		<div id="program" class="btn-group">
-			<form role="form">
-				Select program: <select id="formSelector"></select>
-			</form>
-		</div>
-	<!-- <table class="table table-hover" id="dataElementTable"></table> -->
-	<div id="dataElementFrom">
-		<form id="formData">
+	<div id="skipLogicAlert"></div>
+	<div id="alertArea"></div>
+	<div id="program" class="btn-group">
+		<form role="form">
+			<label for="selectProgram">Select program:</label> <select id="formSelector"></select>
 		</form>
+		<div id="programNameView" class="btn-group"></div>
 	</div>
+	<div id="dataElementFrom">
+		<form class="form-horizontal" role="form" id="formData"></form>
+	</div>
+	<div id="button"></div>
+
+	<!-- Our own JS files -->
 	<script src="js/hostcheck.js"></script>
-	<script src="js/datafetching.js"></script>
+	<script src="js/program.js"></script>
+	<script src="js/sendingdata.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function() {
 		getDataSets();
-
-		$("#formSelector").change(function() {
+		
+		$('#formSelector').change(function() {
 			getProgramStages();
 		});
 	});

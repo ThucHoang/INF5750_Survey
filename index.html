@@ -3,56 +3,65 @@
 	 * Created by Thuc Hoang and Nguyen Cong Nguyen
 	 *
 	 * Main page for navigation of the survey
--->
+	-->
 
-<html><head>
-<title>N.E.T Survey</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/bootstrap.css">
-<link rel="stylesheet" href="css/bootstrap-theme.css">
-<head/>
-<body>
-	<nav class="navbar navbar-default" role="navigation">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-			</button>
-			<a class="navbar-brand" href="#">N.E.T Survey</a>
-		</div>
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav" id="menu-bar">
-				<li class="active"><a href="#" id="dashboard">Dashboard</a></li>
-				<!-- TBD: Only show "Create skip-logic" if the user are in the group of superuser/allowed to see logic -->
-				<li><a href="#" id="skip-logic">Create skip-logic</a></li>
-				<li><a href="#" id="program">Programs</a></li>
-			</ul>
-			<p class="navbar-text navbar-right" id="loginInfo"></p>
-		</div>
-	</nav>
-	<div class="container" id="content"></div>
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="js/jquery-2.0.3.js"></script>
-	<script src="js/bootstrap.js"></script>
+	<html><head><title>N.T Web App Survey</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/bootstrap-theme.css">
+	<head/>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Navigation</span>
+				</button>
+				<a class="navbar-brand" href="">N.T Survey</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav" id="menu-bar">
+					<li><a href="#" id="dashboard">Dashboard</a></li>
+					<li><a href="#" id="skip-logic">Create skip-logic</a></li>
+					<li><a href="#" id="program">Programs</a></li>
+				</ul>
+				<p class="navbar-text navbar-right" id="loginInfo"></p>
+			</div>
+		</nav>
+		<br /><br /><br />
+		<div class="container" id="content"><h2>Welcome to N.T's Web App Survey!</h2></div>
 
-	<!-- Our own JS files -->
-	<script src="js/hostcheck.js"></script>
-	<script src="js/datafetching.js"></script>
-	<script type="text/javascript">
-	$(document).ready(function() {
-		getUserData();
-		$('#dashboard').click(function(){
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="js/jquery-2.0.3.js"></script>
+		<script src="js/bootstrap.js"></script>
+
+		<!-- Our own JS files -->
+		<script src="js/hostcheck.js"></script>
+		<script src="js/program.js"></script>
+		<script src="js/sendingdata.js"></script>
+
+		<script type="text/javascript">
+		$(document).ready(function() {
+			getUserData();
 			$('#content').load("pages/dashboard.html");
-		});
 
-		$('#skip-logic').click(function(){
-			$('#content').load("pages/skiplogic.html");
-		});
+			$('li > a').click(function() {
+				$('li').removeClass();
+				$(this).parent().addClass('active');
+			});
 
-		$('#program').click(function(){
-			$('#content').load("pages/program.html");
+			$('#dashboard').click(function() {
+				$('#content').load("pages/dashboard.html");
+			});
+
+			$('#skip-logic').click(function() {
+				$('#content').load("pages/skiplogic.html");
+			});
+
+			$('#program').click(function() {
+				$('#content').load("pages/program.html");
+			});
 		});
-	});
-	</script>
-</body>
-</html>
+		</script>
+	</body>
+	</html>
