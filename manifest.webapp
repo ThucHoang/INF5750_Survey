@@ -1,7 +1,7 @@
 {
-	"version": "0.2",
-	"name": "N.E.T Survey",
-	"description": "A webapp created by group N.E.T!",
+	"version": "0.3",
+	"name": "N.T.K Survey",
+	"description": "A webapp created by group N.T.K!",
 	"installs_allowed_from" : [ "*"],
 	"launch_path": "/index.html",
 	"icons": {
@@ -10,9 +10,9 @@
         "128": "/img/net_logo.png"
     },
 	"developer": {
-		"name": "N.E.T",
+		"name": "N.T.K",
 		"company": "University of Oslo",
-		"url": "https://wiki.uio.no/mn/ifi/inf5750/index.php/N.E.T_Survey"
+		"url": "https://wiki.uio.no/mn/ifi/inf5750/index.php/N.T.K_Survey"
 	},
 	"default_locale": "en",
 	"activities": {

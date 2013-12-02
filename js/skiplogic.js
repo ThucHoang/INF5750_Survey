@@ -39,19 +39,21 @@ var skipLogicArray = [];
  	var allPrograms = document.getElementById("programSelect").options;
  	var url = getHost() + '/api/systemSettings/NT.' + allPrograms[selectedProgram].value + '.skiplogic';
  	var dataElementsString = "";
+
  	if(selectedProgram != 0){
  		$.ajax({
  			url: url,
  			contentType: 'application/json',
  			dataType: 'json'
  		}).success(function(data) {
- 			dataElementsString += '<select id="allDataElements" size="' + data.programStageDataElements.length + '">';
+ 			dataElementsString += '<select id="allDataElements" size="10">';
  			$.each(data.programStageDataElements, function(index, value) {
  				dataElementsString += '<option value="' + value.id + '">' + value.name + '</option>';
- 				skipLogicArray[index] = new Array(3);
+ 				skipLogicArray[index] = new Array(4);
  				skipLogicArray[index][0] = value.id;
  				skipLogicArray[index][1] = value.true;
  				skipLogicArray[index][2] = value.false;
+ 				skipLogicArray[index][3] = value.name;
  			});
  			dataElementsString += '</select>';
  			if(skipLogicArray.length == 0) {
@@ -61,11 +63,47 @@ var skipLogicArray = [];
  				$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
  				$('#skipLogicView').append(dataElementsString);
  			}
- 			console.log(dataElementsString);
+
+ 			$('#allDataElements').change(function() {
+ 				$('#skipLogicTrueView').empty();
+ 				$('#skipLogicFalseView').empty();
+ 				retrieveTrueFalseValues();
+ 			});
+ 			
  		}).error(function(data) {
  			$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
  			console.log("Fetching skip-logic FAILED!");
- 	});//End of ajax
+ 	});
  	}
+ }
+
+ function retrieveTrueFalseValues() {
+ 	var selectedProgram = document.getElementById("allDataElements").selectedIndex;
+ 	var allPrograms = document.getElementById("allDataElements").options;
  	
+ 	for(var i = 0; i < skipLogicArray.length; i++) {
+ 		if(skipLogicArray[i][0] == allPrograms[selectedProgram].value) {
+ 			if(skipLogicArray[i][1] != null) {
+ 				$('#skipLogicTrueView').append(returnNameOfId(skipLogicArray[i][1]));
+ 			}
+ 			else {
+ 				$('#skipLogicTrueView').append("NO TRUE VALUE EXISTS!");
+ 			}
+ 			if(skipLogicArray[i][2] != null) {
+ 				$('#skipLogicFalseView').append(returnNameOfId(skipLogicArray[i][2]));
+ 			}
+ 			else {
+ 				$('#skipLogicFalseView').append("NO FALSE VALUE EXISTS!!");
+ 			}
+ 		}
+ 	}
+ }
+
+ function returnNameOfId(id) {
+ 	for(var i = 0; i < skipLogicArray.length; i++) {
+ 		if(skipLogicArray[i][0] == id) {
+ 			return skipLogicArray[i][3];
+ 		}
+ 	}
+ 	return null;
  }
