@@ -5,13 +5,32 @@
 </head>
 <body>
 	<div id="userInformation"></div>
-	
+	<div id="detailedInfo"></div>
+
+	<div class="row">
+		<div class="col-md-1">Job title:</div>
+  		<div class="col-md-4" id="jobTitleData"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-1">Introduction:</div>
+  		<div class="col-md-4" id="introductionData"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-1">Email:</div>
+  		<div class="col-md-4" id="emailData"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-1">Birthday:</div>
+  		<div class="col-md-4" id="birthdayData"></div>
+	</div>
+
 	<!-- Our own JS files -->
 	<script src="js/hostcheck.js"></script>
 	<script src="js/dashboard.js"></script>
 
 	<script type="text/javascript">
 	$(document).ready(function() {
+
 		getUserData();
 	});
 	</script>

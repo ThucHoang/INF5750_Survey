@@ -14,6 +14,7 @@
  		dataType: 'json'
  	}).success(function(data) {
  		refreshDashboardData(data);
+ 		getDataAboutMe(data);
  	}).error(function(data) {
  		console.log("Could not retrieve user data");
  	});
@@ -75,4 +76,13 @@
  	}).error(function(data) {
  		console.log("ERROR WITH # of programs");
  	});
+ }
+
+ function getDataAboutMe(json) {
+ 	$('#detailedInfo').empty();
+ 	$('#detailedInfo').append('<br/><h2>User information:</h2>');
+ 	$('#jobTitleData').append(json.jobTitle);
+ 	$('#introductionData').append(json.introduction);
+ 	$('#emailData').append(json.email);
+ 	$('#birthdayData').append(json.birthday);
  }
