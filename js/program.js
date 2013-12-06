@@ -116,8 +116,7 @@
  	var allPrograms = document.getElementById("formSelector").options;
  	var url = getHost() + '/api/programs/' + allPrograms[selectedProgram].value + '.json';
  	programID = allPrograms[selectedProgram].value;
- 	if(selectedProgram != 0){
-
+ 	if(selectedProgram != 0) {
  		if(allPrograms[selectedProgram].value != '#') {
  			$.ajax({
  				url: url,
@@ -136,9 +135,9 @@
  		else {
  			$('#formData').empty();
  		}
+
  	}
  }
-
 /*
  * Checking the server if there's any pre-made skiplogic
  */
@@ -150,18 +149,18 @@
  		contentType: 'application/json',
  		dataType: 'json'
  	}).success(function(data) {
- 		$.each(data.programStageDataElements, function(index, value) {
- 			skipLogicArray[index] = new Array(3);
- 			skipLogicArray[index][0] = value.id;
- 			skipLogicArray[index][1] = value.true;
- 			skipLogicArray[index][2] = value.false;
- 		});
- 		if(skipLogicArray.length == 0) {
+ 		if(data.length == 0 || data == null || data == "" || data == undefined) {
  			$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
  		}
  		else {
  			found = true;
  			$('#skipLogicAlert').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
+ 			$.each(data.programStageDataElements, function(index, value) {
+ 				skipLogicArray[index] = new Array(3);
+ 				skipLogicArray[index][0] = value.id;
+ 				skipLogicArray[index][1] = value.true;
+ 				skipLogicArray[index][2] = value.false;
+ 			});
  		}
  	}).error(function(data) {
  		$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');

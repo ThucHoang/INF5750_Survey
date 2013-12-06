@@ -31,8 +31,6 @@
   $('#content').empty();
   $('#content').append('<br /><br /><center>Please wait while the data is getting sent to the server.</center>');
   parseJSON(json);
-  
-  
 }
 
 /*
@@ -62,8 +60,7 @@
     }
   });
   eventJSON += ']}]}';
- // $('#content').append(eventJSON);
- sendJSON(eventJSON);
+  sendJSON(eventJSON);
 }
 
 /*
