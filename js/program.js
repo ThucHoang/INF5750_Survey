@@ -149,6 +149,7 @@
  		contentType: 'application/json',
  		dataType: 'json'
  	}).success(function(data) {
+ 		//Thatsit? Maybe check if data.id exists or not.
  		if(data.length == 0 || data == null || data == "" || data == undefined) {
  			$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
  		}
@@ -156,10 +157,13 @@
  			found = true;
  			$('#skipLogicAlert').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
  			$.each(data.programStageDataElements, function(index, value) {
+ 				skipLogicArray[index] = value;
+ 				/*
  				skipLogicArray[index] = new Array(3);
  				skipLogicArray[index][0] = value.id;
  				skipLogicArray[index][1] = value.true;
  				skipLogicArray[index][2] = value.false;
+ 				*/
  			});
  		}
  	}).error(function(data) {
@@ -314,24 +318,24 @@
 
  		checkIfNoMoreTrueElements();
  		if(currentElement == "eventDate") {
- 			currentElement = skipLogicArray[0][0];
+ 			currentElement = skipLogicArray[0].id;
  			check = true;
  			break;
  		}
 
- 		if(skipLogicArray[dataElementPos][index] == currentElement) {
+ 		if(skipLogicArray[dataElementPos].id == currentElement) {
  			$('#skipLogicAlert').empty();
 
  			if(element != undefined && element != "") {
- 				if(skipLogicArray[dataElementPos][index+1] != null) {
- 					getDataElementInfo(skipLogicArray[dataElementPos][index+1]);
- 					currentElement = skipLogicArray[dataElementPos][index+1];
+ 				if(skipLogicArray[dataElementPos].true != null) {
+ 					getDataElementInfo(skipLogicArray[dataElementPos].true);
+ 					currentElement = skipLogicArray[dataElementPos].true;
  				}
  			}
  			else {
- 				if(skipLogicArray[dataElementPos][index+2] != null) {
- 					getDataElementInfo(skipLogicArray[dataElementPos][index+2]);
- 					currentElement = skipLogicArray[dataElementPos][index+2];
+ 				if(skipLogicArray[dataElementPos].false != null) {
+ 					getDataElementInfo(skipLogicArray[dataElementPos].false);
+ 					currentElement = skipLogicArray[dataElementPos].false;
  				}
  			}
  			check = true;
@@ -358,8 +362,8 @@
  */
  function checkIfNoMoreTrueElements() {
  	for(var i = 0; i < skipLogicArray.length; i++) {
- 		if(skipLogicArray[i][0] == currentElement) {
- 			if(skipLogicArray[i][1] == null) {
+ 		if(skipLogicArray[i].id == currentElement) {
+ 			if(skipLogicArray[i].true == null) {
  				showSubmitButton();
  			}
  		}
