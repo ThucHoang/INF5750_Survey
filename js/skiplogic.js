@@ -1,6 +1,8 @@
 
 var skipLogicArray = [];
 var currentElement = null;
+var formID = null;
+
 /*
  * Fetching the dataSets from programs.json
  */
@@ -40,13 +42,15 @@ var currentElement = null;
  	var allPrograms = document.getElementById("programSelect").options;
  	var url = getHost() + '/api/systemSettings/NT.' + allPrograms[selectedProgram].value + '.skiplogic';
  	var dataElementsString = "";
+ 	formID = allPrograms[selectedProgram].value;
 
- 	if(selectedProgram != 0){
+ 	if(selectedProgram != 0) {
  		$.ajax({
  			url: url,
  			contentType: 'application/json',
  			dataType: 'json'
  		}).success(function(data) {
+ 			console.log(data);
  			if(data.length == 0 || data == null || data == "" || data == undefined) {
  				$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
  			}
@@ -80,38 +84,27 @@ var currentElement = null;
  function retrieveTrueFalseValues() {
  	var selectedProgram = document.getElementById("allDataElements").selectedIndex;
  	var allPrograms = document.getElementById("allDataElements").options;
- 	//var trueView = '<select id="trueView" size="10">';
- 	//var falseView = '<select id="falseView" size="10">';
  	currentElement = allPrograms[selectedProgram].value;
  	var test = 'If value equals: <input type="text" size="30" id="test" /><br />Show: <select id="trueView">';
+
  	for(var i = 0; i < skipLogicArray.length; i++) {
  		if(skipLogicArray[i][0] == allPrograms[selectedProgram].value) {
  			if(skipLogicArray[i][1] != null) {
  				test += '<option value="' + skipLogicArray[i][1] + '">' + returnNameOfId(skipLogicArray[i][1]) + '</option>';
- 				//$('#skipLogicTrueView').append();
  			}
  			else {
- 				//$('#skipLogicTrueView').append("NO TRUE VALUE EXISTS!");
  				console.log("no true value");
  			}
  			if(skipLogicArray[i][2] != null) {
- 				//falseView += '<option value="' + skipLogicArray[i][2] + '">' + returnNameOfId(skipLogicArray[i][2]) + '</option>';
- 				//$('#skipLogicFalseView').append(returnNameOfId(skipLogicArray[i][2]));
+
  			}
  			else {
- 				//$('#skipLogicFalseView').append("NO FALSE VALUE EXISTS!!");
  				console.log("no false value");
  			}
  		}
  	}
  	test += '</select>';
  	$('#skipLogicTrueView').append(test);
- 	/*
- 	trueView += '</select>';
- 	falseView += '</select>';
- 	$('#skipLogicTrueView').append(trueView);
- 	$('#skipLogicFalseView').append(falseView);
- 	*/
  }
 
  function returnNameOfId(id) {
@@ -124,5 +117,22 @@ var currentElement = null;
  }
 
  function returnIdOfName(name) {
- 	
+ 	for(var i = 0; i < skipLogicArray.length; i++) {
+ 		if(skipLogicArray[i][4] == name) {
+ 			return skipLogicArray[i][0];
+ 		}
+ 	}
+ }
+
+ function sendFormData() {
+ 	var url = getHost() + '/api/systemSettings/NTK.' + formID + '.skiplogic';
+
+ 	$.ajax({
+ 		url: url,
+ 		contentType: 'application/text'
+ 	}).success(function(data) {
+
+ 	}).error(function(xhr, textStatus, errorThrown) {
+
+ 	});
  }
