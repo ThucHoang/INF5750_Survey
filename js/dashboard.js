@@ -81,7 +81,8 @@
  function getDataAboutMe(json) {
  	$('#detailedInfo').empty();
  	$('#detailedInfo').append('<br/><h2>User information:</h2>');
- 	$('#jobTitleData').append(json.jobTitle);
+
+ 	$('#jobTitleData').text(json.jobTitle);
  	$('#introductionData').append(json.introduction);
  	$('#emailData').append(json.email);
  	$('#birthdayData').append(json.birthday);
