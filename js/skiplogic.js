@@ -50,20 +50,20 @@ var formID = null;
  			contentType: 'application/json',
  			dataType: 'json'
  		}).success(function(data) {
- 			console.log(data);
  			if(data.length == 0 || data == null || data == "" || data == undefined) {
  				$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
  			}
  			else {
  				$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
- 				dataElementsString += '<select id="allDataElements" size="10">';
+ 				dataElementsString += '<select id="allDataElements" size="' + data.programStageDataElements.length + '">';
  				$.each(data.programStageDataElements, function(index, value) {
+ 					skipLogicArray[index] = value;
  					dataElementsString += '<option value="' + value.id + '">' + value.name + '</option>';
- 					skipLogicArray[index] = new Array(4);
+ 					/*skipLogicArray[index] = new Array(4);
  					skipLogicArray[index][0] = value.id;
  					skipLogicArray[index][1] = value.true;
  					skipLogicArray[index][2] = value.false;
- 					skipLogicArray[index][3] = value.name;
+ 					skipLogicArray[index][3] = value.name;*/
  				});
  				dataElementsString += '</select>';
  				$('#skipLogicView').append(dataElementsString);
@@ -88,14 +88,14 @@ var formID = null;
  	var test = 'If value equals: <input type="text" size="30" id="test" /><br />Show: <select id="trueView">';
 
  	for(var i = 0; i < skipLogicArray.length; i++) {
- 		if(skipLogicArray[i][0] == allPrograms[selectedProgram].value) {
- 			if(skipLogicArray[i][1] != null) {
- 				test += '<option value="' + skipLogicArray[i][1] + '">' + returnNameOfId(skipLogicArray[i][1]) + '</option>';
+ 		if(skipLogicArray[i].id == allPrograms[selectedProgram].value) {
+ 			if(skipLogicArray[i].true != null) {
+ 				test += '<option value="' + skipLogicArray[i].true + '">' + skipLogicArray[i].name + '</option>';
  			}
  			else {
  				console.log("no true value");
  			}
- 			if(skipLogicArray[i][2] != null) {
+ 			if(skipLogicArray[i].false != null) {
 
  			}
  			else {
@@ -105,23 +105,6 @@ var formID = null;
  	}
  	test += '</select>';
  	$('#skipLogicTrueView').append(test);
- }
-
- function returnNameOfId(id) {
- 	for(var i = 0; i < skipLogicArray.length; i++) {
- 		if(skipLogicArray[i][0] == id) {
- 			return skipLogicArray[i][3];
- 		}
- 	}
- 	return null;
- }
-
- function returnIdOfName(name) {
- 	for(var i = 0; i < skipLogicArray.length; i++) {
- 		if(skipLogicArray[i][4] == name) {
- 			return skipLogicArray[i][0];
- 		}
- 	}
  }
 
  function sendFormData() {
