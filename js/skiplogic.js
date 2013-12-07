@@ -107,7 +107,7 @@ var formID = null;
  				} 
  				else {
  					trueValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
- 					falseValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
+ 					//falseValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
  				}
  			}
  		}
@@ -120,7 +120,7 @@ var formID = null;
  			else {
  				console.log("os: " + x);
  				trueValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
- 				falseValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
+ 				//falseValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
  			}
  		}
  		else if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id == currentElement)) {
@@ -130,7 +130,7 @@ var formID = null;
  			}
  			else {
  				trueValueOptionSetString = 'NO VALUE CAN BE SET HERE';
- 				falseValueOptionSetString = 'NO VALUE CAN BE SET HERE';
+ 				//falseValueOptionSetString = 'NO VALUE CAN BE SET HERE';
  			}
  		}
  	}
