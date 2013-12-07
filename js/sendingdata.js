@@ -82,5 +82,7 @@
   }).error(function(xhr, textStatus, errorThrown) {
     $('#content').empty();
     $('#content').append('<br /><br /><center><h1>An error has occured! The from data has not been sent!<br /><b>Please retry!</b></center>');
+    $('#content').append('<br /><br />');
+    $('#content').append(json);
   });
 }

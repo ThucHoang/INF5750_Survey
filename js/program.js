@@ -3,10 +3,10 @@
  */
 
  // Global variables
- var dataElementArray = [];
- var skipLogicArray = [];
+ var dataElementArray = []; // All other dataelements
+ var skipLogicArray = [];//SkipLogicArray Settings
  var bypass = false;
- var found = false;
+ var foundSkipLogicSettings = false; //This variable is to indicate if skipLogicSettings is found or not
  var skiplogic = false;
  var endOfElements = false;
  var dangerOptionSet = false;
@@ -98,7 +98,7 @@
  */
  function getProgramStages() {
  	bypass = false;
- 	found = false;
+ 	foundSkipLogicSettings = false;
  	currentElement = null;
  	counter = 0;
  	dataElementArray = [];
@@ -154,7 +154,7 @@
  			$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
  		}
  		else {
- 			found = true;
+ 			foundSkipLogicSettings = true;
  			$('#skipLogicAlert').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
  			$.each(data.programStageDataElements, function(index, value) {
  				skipLogicArray[index] = value;
@@ -168,7 +168,7 @@
  		}
  	}).error(function(data) {
  		$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
- 		found = false;
+ 		foundSkipLogicSettings = false;
  		console.log("Fetching skip-logic FAILED!");
  	});
  }
@@ -230,29 +230,12 @@
  		$("form.form-horizontal .elementDiv:first-child").fadeIn(500).focus();
 
  		document.getElementById('next').onclick = function() {
- 			var check = null;
+ 			
  			$('#skipLogicAlert').empty();
-
- 			checkIfNoMoreTrueElements();
-
- 			if(!bypass && dangerOptionSet) {
- 				// Do nothing
- 			}
- 			else {
- 				check = document.getElementsByName(currentElement)[0].value;
- 			}
-
- 			if(check == "" && currentElement != "eventDate") {
- 				$('#' + currentElement).hide();
- 			}
-
- 			if(found) {
- 				checkIfNoMoreTrueElements();
- 			}
- 			if(check == "" && currentElement == "eventDate") {
- 				$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>Please insert the date of the event!</center>');
- 			}
- 			else if(currentElement == "orgUnits") {
+ 			console.log("Current element: " + currentElement);
+ 			var check = document.getElementsByName(currentElement)[0].value;
+ 			//firstcheck: Remember to make sure that first current is orgUnits
+ 			if(currentElement === "orgUnits"){
  				var orgUnitID = document.getElementsByName(currentElement)[0].value;
  				if(orgUnitID == "#") {
  					$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>Please choose a organisation unit to register this event on!</center>');
@@ -262,41 +245,32 @@
  					appendEventDate();
  				}
  			}
- 			else if(currentElement == "eventDate") {
- 				var eventDateId = document.getElementsByName(currentElement)[0].value;
-
- 				if(found) {
- 					eventDateID = eventDateId;
- 					checkInputWithSkipLogic();
- 					getDataElementInfo(currentElement);
+ 			//SecondCheck: 
+ 			else if(currentElement === "eventDate"){
+ 				if(check == ""){//Its not the best form validation here lol.
+ 					$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>Please insert the date of the event!</center>');
  				}
  				else {
- 					eventDateID = eventDateId;
- 					currentElement = dataElementArray[counter];
+ 					eventDateID = document.getElementsByName(currentElement)[0].value;
+ 					currentElement = dataElementArray[counter++];
  					getDataElementInfo(currentElement);
- 				}
- 			}
- 			else {
- 				if(skipLogicArray.length == 0 && !found) {
- 					if(check == "") {
- 						$('#' + currentElement).hide();
- 					}
- 					currentElement = dataElementArray[counter+1];
 
- 					if(counter >= dataElementArray.length-1) {
- 						showSubmitButton();
- 					}
- 					else {
- 						getDataElementInfo(currentElement);
- 					}
- 					counter++;
- 				}
- 				else {
- 					checkIfNoMoreTrueElements();
- 					checkInputWithSkipLogic();
  				}
  			}
- 		}
+ 			//if not settings, just show them all
+ 			else if(foundSkipLogicSettings === false){
+ 				console.log("No settings found, show me next");
+ 				currentElement = dataElementArray[counter++];
+ 				getDataElementInfo(currentElement);
+ 				if(counter >= dataElementArray.length){
+ 					showSubmitButton();
+ 				}
+ 			}
+ 			else{//skiplogicpart
+ 				//checkIfNoMoreTrueElements();
+ 				//checkInputWithSkipLogic();
+ 			}
+ 		}//next
  	}).error(function(data) {
  		console.log("DATA ARRAY ERROR");
  	});
