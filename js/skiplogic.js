@@ -27,7 +27,7 @@ var formID = null;
  		outputString += '<option value="#">Select one of the programs below</option>';
  	}
  	$.each(json.programs, function(index, value) {
- 		if(value.type == 3) {
+ 		if(value.type === 3) {
  			outputString += '<option value="' + value.id + '">' + value.name + '</option>';
  		}
  	});
@@ -50,7 +50,7 @@ var formID = null;
  			contentType: 'application/json',
  			dataType: 'json'
  		}).success(function(data) {
- 			if(data.length == 0 || data == null || data == "" || data == undefined) {
+ 			if(data.length === 0 || data === null || data === "" || data === undefined) {
  				$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
  			}
  			else {
@@ -59,11 +59,6 @@ var formID = null;
  				$.each(data.programStageDataElements, function(index, value) {
  					skipLogicArray[index] = value;
  					dataElementsString += '<option value="' + value.id + '">' + value.name + '</option>';
- 					/*skipLogicArray[index] = new Array(4);
- 					skipLogicArray[index][0] = value.id;
- 					skipLogicArray[index][1] = value.true;
- 					skipLogicArray[index][2] = value.false;
- 					skipLogicArray[index][3] = value.name;*/
  				});
  				dataElementsString += '</select>';
  				$('#skipLogicView').append(dataElementsString);
@@ -71,6 +66,7 @@ var formID = null;
  				$('#allDataElements').change(function() {
  					$('#skipLogicTrueView').empty();
  					$('#skipLogicFalseView').empty();
+ 					$('#trueView').empty();
  					retrieveTrueFalseValues();
  				});
  			}
@@ -82,29 +78,79 @@ var formID = null;
  }
 
  function retrieveTrueFalseValues() {
+ 	$('#skipLogicTrueView').empty();
+ 	$('#skipLogicFalseView').empty();
  	var selectedProgram = document.getElementById("allDataElements").selectedIndex;
  	var allPrograms = document.getElementById("allDataElements").options;
  	currentElement = allPrograms[selectedProgram].value;
- 	var test = 'If value equals: <input type="text" size="30" id="test" /><br />Show: <select id="trueView">';
+ 	var trueValueInputString = 'Current values for True<br /><label>If value equals</label>:  <input type="text" size="20" id="test" /><br /><label>Show this next</label>: <select id="inputTrue"><option value="submitButton">Submit button</option>';
+ 	var falseValueInputString = 'Current values for False<br /><label>If value are empty show</label>:  <select id="inputFalse"><option value="submitButton">Submit button</option>';
+ 	var trueValueOptionSetString = '<label>Show this</label>: <select id="optionSetTrue"><option value="submitButton">Submit button</option>';
+ 	var falseValueOptionSetString = '<label>Show this</label>: <select id="optionSetFalse"><option value="submitButton">Submit button</option>';
+ 	var status = '';
+ 	var positionOfElement = null;
 
  	for(var i = 0; i < skipLogicArray.length; i++) {
- 		if(skipLogicArray[i].id == allPrograms[selectedProgram].value) {
- 			if(skipLogicArray[i].true != null) {
- 				test += '<option value="' + skipLogicArray[i].true + '">' + skipLogicArray[i].name + '</option>';
+ 		if(skipLogicArray[i].id === currentElement) {
+ 			positionOfElement = i;
+ 			status = skipLogicArray[i].type;
+ 			i = skipLogicArray.length;
+ 		}
+ 	}
+ 	
+ 	for(var x = 0; x < skipLogicArray.length; x++) {
+ 		if(skipLogicArray[x].true != null) {
+ 			if(skipLogicArray[x].id != currentElement && x > positionOfElement) {
+ 				if(status == 'input') {
+ 					trueValueInputString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
+ 					falseValueInputString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
+ 				} 
+ 				else {
+ 					trueValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
+ 					falseValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
+ 				}
+ 			}
+ 		}
+ 		if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id != currentElement)) {
+ 			if(status === 'input') {
+ 				console.log("input: " + x);
+ 				trueValueInputString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
+ 				falseValueInputString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
  			}
  			else {
- 				console.log("no true value");
+ 				console.log("os: " + x);
+ 				trueValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
+ 				falseValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
  			}
- 			if(skipLogicArray[i].false != null) {
-
+ 		}
+ 		else if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id == currentElement)) {
+ 			if(status === 'input') {
+ 				trueValueInputString = 'NO VALUE CAN BE SET HERE';
+ 				falseValueInputString = 'NO VALUE CAN BE SET HERE';
  			}
  			else {
- 				console.log("no false value");
+ 				trueValueOptionSetString = 'NO VALUE CAN BE SET HERE';
+ 				falseValueOptionSetString = 'NO VALUE CAN BE SET HERE';
  			}
  		}
  	}
- 	test += '</select>';
- 	$('#skipLogicTrueView').append(test);
+
+ 	trueValueInputString += '</select>';
+ 	falseValueInputString += '</select>';
+ 	trueValueOptionSetString += '</select>';
+ 	falseValueOptionSetString += '</select>';
+
+ 	if(status === 'input') {
+ 		console.log("INPUT");
+ 		$('#skipLogicTrueView').append(trueValueInputString);
+ 		$('#skipLogicFalseView').append(falseValueInputString);
+ 	}
+ 	else {
+ 		console.log("OPTIONSET");
+ 		$('#skipLogicTrueView').append(trueValueOptionSetString);
+ 		$('#skipLogicFalseView').append(falseValueOptionSetString);
+ 	}
+
  }
 
  function sendFormData() {
