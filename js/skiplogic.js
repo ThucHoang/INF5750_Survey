@@ -54,7 +54,19 @@ var found = false;
  		}).success(function(data) {
  			found = true;
  			if(data.length === 0 || data === null || data === "" || data === undefined) {
- 				$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
+ 				found = false;
+ 				$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!<br/><span id="create-skip-logic"><b>Click here</b></span> to create a null defined setting</center></div>');
+ 				document.getElementById('create-skip-logic').onclick = function(){
+ 					createEmtpySkipLogicSettings(allPrograms[selectedProgram].value);
+ 				};
+ 				$('#create-skip-logic').on({
+ 					mouseenter:function(){
+ 						$(this).css("text-decoration", "underline");
+ 					},
+ 					mouseleave: function(){
+ 						$(this).css("text-decoration", "none");
+ 					}
+ 				});
  			}
  			else {
  				$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A pre-defined skip-logic has been found for this particular program!</center></div>');
@@ -75,8 +87,21 @@ var found = false;
  			}
  		}).error(function(data) {
  			found = false;
- 			$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
+ 			$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!<br/><span id="create-skip-logic"><b>Click here</b></span> to create a null defined setting</center></div>');
  			console.log("Fetching skip-logic FAILED!");
+ 			//Javascript vs jquery
+ 			document.getElementById('create-skip-logic').onclick = function(){
+ 				createEmtpySkipLogicSettings(allPrograms[selectedProgram].value);
+ 			};
+ 			$('#create-skip-logic').on({
+ 				mouseenter:function(){
+
+ 					$(this).css("text-decoration", "underline");
+ 				},
+ 				mouseleave: function(){
+ 					$(this).css("text-decoration", "none");
+ 				}
+ 			});
  		});
  	}
  }
@@ -299,3 +324,77 @@ function sendFormData(info) {
 		$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A problem has occured while saving the skip-logic rule. Please contact an administrator!</center></div>');
 	});
 }
+ function createEmtpySkipLogicSettings(id){
+ 	var length; 
+ 	var tmp = {};
+ 	tmp["programID"] = id;
+ 	tmp["programStageDataElements"] = [];
+ 	$.ajax({
+ 		url: getHost() + '/api/programs/' + id + '.json',
+ 		contentType: 'application/json',
+ 		dataType: 'json'
+ 	}).success(function(data){
+ 		$.ajax({
+ 			url: getHost() + '/api/programStages/'+ data.programStages[0].id + '.json',
+ 			contentType: 'application/json',
+ 			dataType: 'json'
+ 		}).success(function(data){
+ 			length = data.programStageDataElements.length;
+ 			$.each(data.programStageDataElements, function(index, value){
+ 				
+ 				$.ajax({
+ 					url: getHost() + '/api/dataElements/'+ value.dataElement.id + '.json',
+ 					contentType: 'application/json',
+ 					dataType: 'json'
+ 				}).success(function(data){
+ 					addDataElementToObject(data, index);
+ 				});
+ 			});
+ 			//console.log(tmp);
+ 		}).error(function(data){});
+ 	})
+ 	.error(function(data){
+
+ 	});
+
+ 	function addDataElementToObject(data, index){
+ 		console.log(data);
+ 		console.log(index);
+ 		var element = {
+ 			"name": data.name,
+ 			"id": data.id
+ 		};
+ 		if(data.optionSet === null){
+ 			element["category"] = "input";
+ 			if(data.type === "int"){
+ 				element["type"] = "int";
+ 			}
+ 			else if(data.type === "string"){
+ 				element["type"] = "text";
+ 			}
+ 			else if(data.type === "date"){
+ 				element["type"] = "date";
+ 			}
+ 		}
+ 		else{
+ 			element["category"] = "optionset";
+ 			element["type"] = null;
+
+ 		}
+ 		element["true"] = {
+ 				"value": null,
+ 				"greater": {"id": null},
+ 				"less": {"id": null},
+ 				"equal": {"id": null}
+ 			};
+ 			element["false"] = null;
+ 			element["next"] = null;
+ 		console.log(element);
+ 		tmp.programStageDataElements[index] = element;
+ 		if(tmp.programStageDataElements.length == length){
+ 			//console.log(JSON.stringify(tmp));
+ 			sendFormData(JSON.stringify(tmp));
+ 		}
+ 	}
+ 	//console.log(tmp);
+ }
