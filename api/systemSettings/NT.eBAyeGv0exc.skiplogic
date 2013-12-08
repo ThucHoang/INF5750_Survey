@@ -46,7 +46,7 @@
 		"id": "eMyVanycQSC",
 		"category": "input",
 		"type": "date",
-		"true" :{
+		"true" : {
 			"greater": {
 			"id": null
 			},
@@ -65,7 +65,7 @@
 		"id": "msodh3rEMJa",
 		"category": "input",
 		"type": "date",
-		"true" :{
+		"true" : {
 			"greater": {
 			"id": null
 			},
@@ -84,7 +84,7 @@
 		"id":"fWIAEtYVEGk",
 		"category": "optionset",
 		"type": null,
-		"true" :{
+		"true" : {
 			"greater": {
 			"id": null
 			},
@@ -103,7 +103,7 @@
 		"id":"K6uUAvq500H",
 		"category": "optionset",
 		"type": null,
-		"true" :{
+		"true" : {
 			"greater": {
 			"id": null
 			},
