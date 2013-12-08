@@ -86,7 +86,7 @@ var formID = null;
  	var trueValueInputString = 'Current values for True<br /><label>If value equals</label>:  <input type="text" size="20" id="test" /><br /><label>Show this next</label>: <select id="inputTrue"><option value="submitButton">Submit button</option>';
  	var falseValueInputString = 'Current values for False<br /><label>If value are empty show</label>:  <select id="inputFalse"><option value="submitButton">Submit button</option>';
  	var trueValueOptionSetString = '<label>Show this</label>: <select id="optionSetTrue"><option value="submitButton">Submit button</option>';
- 	var falseValueOptionSetString = '<label>Show this</label>: <select id="optionSetFalse"><option value="submitButton">Submit button</option>';
+ 	var falseValueOptionSetString = '<b>OptionSets-value can NEVER be empty!</b>';
  	var status = '';
  	var positionOfElement = null;
 
@@ -107,20 +107,19 @@ var formID = null;
  				} 
  				else {
  					trueValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
- 					//falseValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
  				}
  			}
  		}
  		if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id != currentElement)) {
  			if(status === 'input') {
- 				console.log("input: " + x);
  				trueValueInputString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
  				falseValueInputString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
+ 				trueValueInputString += '</select>';
+ 				falseValueInputString += '</select>';
  			}
  			else {
- 				console.log("os: " + x);
  				trueValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
- 				//falseValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
+ 				trueValueOptionSetString += '</select>';
  			}
  		}
  		else if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id == currentElement)) {
@@ -130,23 +129,15 @@ var formID = null;
  			}
  			else {
  				trueValueOptionSetString = 'NO VALUE CAN BE SET HERE';
- 				//falseValueOptionSetString = 'NO VALUE CAN BE SET HERE';
  			}
  		}
  	}
 
- 	trueValueInputString += '</select>';
- 	falseValueInputString += '</select>';
- 	trueValueOptionSetString += '</select>';
- 	falseValueOptionSetString += '</select>';
-
  	if(status === 'input') {
- 		console.log("INPUT");
  		$('#skipLogicTrueView').append(trueValueInputString);
  		$('#skipLogicFalseView').append(falseValueInputString);
  	}
  	else {
- 		console.log("OPTIONSET");
  		$('#skipLogicTrueView').append(trueValueOptionSetString);
  		$('#skipLogicFalseView').append(falseValueOptionSetString);
  	}
