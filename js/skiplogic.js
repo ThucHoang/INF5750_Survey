@@ -68,7 +68,7 @@ var formID = null;
  					$('#skipLogicFalseView').empty();
  					$('#trueView').empty();
  					retrieveTrueFalseValues();
- 				});
+ 				}); 
  			}
  		}).error(function(data) {
  			$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>No pre-defined skip-logic has been found for this particular program!</center></div>');
@@ -80,10 +80,11 @@ var formID = null;
  function retrieveTrueFalseValues() {
  	$('#skipLogicTrueView').empty();
  	$('#skipLogicFalseView').empty();
+ 	$('#buttons').empty();
  	var selectedProgram = document.getElementById("allDataElements").selectedIndex;
  	var allPrograms = document.getElementById("allDataElements").options;
  	currentElement = allPrograms[selectedProgram].value;
- 	var trueValueInputString = 'Current values for True<br /><label>If value equals</label>:  <input type="text" size="20" id="test" /><br /><label>Show this next</label>: <select id="inputTrue"><option value="submitButton">Submit button</option>';
+ 	var trueValueInputString = 'Current values for True<br /><label>If value equals</label>:  <input type="text" size="20" id="equal" /><br /><label>Greater than value</label>: <input type="text" size="20" id="greater" /><br /><label>Less than value</label>: <input type="text" size="20" id="less" /><br /><label>Show this next</label>: <select id="inputTrue"><option value="submitButton">Submit button</option>';
  	var falseValueInputString = 'Current values for False<br /><label>If value are empty show</label>:  <select id="inputFalse"><option value="submitButton">Submit button</option>';
  	var trueValueOptionSetString = '<label>Show this</label>: <select id="optionSetTrue"><option value="submitButton">Submit button</option>';
  	var falseValueOptionSetString = '<b>OptionSets-value can NEVER be empty!</b>';
@@ -93,7 +94,7 @@ var formID = null;
  	for(var i = 0; i < skipLogicArray.length; i++) {
  		if(skipLogicArray[i].id === currentElement) {
  			positionOfElement = i;
- 			status = skipLogicArray[i].type;
+ 			status = skipLogicArray[i].category;
  			i = skipLogicArray.length;
  		}
  	}
@@ -102,27 +103,15 @@ var formID = null;
  		if(skipLogicArray[x].true != null) {
  			if(skipLogicArray[x].id != currentElement && x > positionOfElement) {
  				if(status == 'input') {
- 					trueValueInputString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
- 					falseValueInputString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
+ 					trueValueInputString += '<option value="' + skipLogicArray[x].id + '">' + skipLogicArray[x].name + '</option>';
+ 					falseValueInputString += '<option value="' + skipLogicArray[x].id + '">' + skipLogicArray[x].name + '</option>';
  				} 
  				else {
- 					trueValueOptionSetString += '<option value="' + skipLogicArray[x].true + '">' + skipLogicArray[x].name + '</option>';
+ 					trueValueOptionSetString += '<option value="' + skipLogicArray[x].id + '">' + skipLogicArray[x].name + '</option>';
  				}
  			}
  		}
- 		if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id != currentElement)) {
- 			if(status === 'input') {
- 				trueValueInputString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
- 				falseValueInputString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
- 				trueValueInputString += '</select>';
- 				falseValueInputString += '</select>';
- 			}
- 			else {
- 				trueValueOptionSetString += '<option value="' + skipLogicArray[x].false + '">' + skipLogicArray[x].name + '</option>';
- 				trueValueOptionSetString += '</select>';
- 			}
- 		}
- 		else if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id == currentElement)) {
+ 		if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id == currentElement)) {
  			if(status === 'input') {
  				trueValueInputString = 'NO VALUE CAN BE SET HERE';
  				falseValueInputString = 'NO VALUE CAN BE SET HERE';
@@ -141,11 +130,19 @@ var formID = null;
  		$('#skipLogicTrueView').append(trueValueOptionSetString);
  		$('#skipLogicFalseView').append(falseValueOptionSetString);
  	}
+ 	$('#buttons').append('<center><input type="button" class="btn btn-success" id="submit" value="Save data" /><input type="button" class="btn btn-danger" id="reset" value="Remove rule" /></center>');
 
+ 	document.getElementById('reset').onclick = function() {
+ 		console.log("reset baby!");
+ 	}
+
+ 	document.getElementById('submit').onclick = function() {
+ 		console.log("submit baby!");
+ 	}
  }
 
  function sendFormData() {
- 	var url = getHost() + '/api/systemSettings/NTK.' + formID + '.skiplogic';
+ 	var url = getHost() + '/api/systemSettings/NT.' + formID + '.skiplogic';
 
  	$.ajax({
  		url: url,
