@@ -2,6 +2,7 @@
 var skipLogicArray = [];
 var currentElement = null;
 var formID = null;
+var positionOfElement = null;
 
 /*
  * Fetching the dataSets from programs.json
@@ -84,16 +85,16 @@ var formID = null;
  	var selectedProgram = document.getElementById("allDataElements").selectedIndex;
  	var allPrograms = document.getElementById("allDataElements").options;
  	currentElement = allPrograms[selectedProgram].value;
- 	var trueValueInputString = 'Current values for True<br /><label>If value equals</label>:  <input type="text" size="20" id="equal" /><br /><label>Greater than value</label>: <input type="text" size="20" id="greater" /><br /><label>Less than value</label>: <input type="text" size="20" id="less" /><br /><label>Show this next</label>: <select id="inputTrue"><option value="submitButton">Submit button</option>';
  	var falseValueInputString = 'Current values for False<br /><label>If value are empty show</label>:  <select id="inputFalse"><option value="submitButton">Submit button</option>';
  	var trueValueOptionSetString = '<label>Show this</label>: <select id="optionSetTrue"><option value="submitButton">Submit button</option>';
- 	var falseValueOptionSetString = '<b>OptionSets-value can NEVER be empty!</b>';
  	var status = '';
- 	var positionOfElement = null;
  	var optionSetStorage = '';
- 	var equalsOptionSet = '';
- 	var greaterOptionSet = '';
- 	var lessOptionSet = '';
+ 	var valueInputField = '<label>Value</label>: <input type="number" id="valueInputField" /><br />';
+ 	var equalsOptionSet = '<label>Equal</label>: <select id="equalsOptionSet">';
+ 	var greaterOptionSet = '<label>Greater</label>: <select id="greaterOptionSet">';
+ 	var lessOptionSet = '<label>Less</label>: <select id="lessOptionSet">';
+ 	var falseInputString = '<label>If input-value are false</label>: <select id="falseInputField">';
+ 	var inputOutputString = '';
 
  	for(var i = 0; i < skipLogicArray.length; i++) {
  		if(skipLogicArray[i].id === currentElement) {
@@ -112,8 +113,6 @@ var formID = null;
  		if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id == currentElement)) {
  			if(status === 'input') {
  				optionSetStorage = '';
- 				trueValueInputString = 'NO VALUE CAN BE SET HERE';
- 				falseValueInputString = 'NO VALUE CAN BE SET HERE';
  			}
  			else {
  				trueValueOptionSetString = 'NO VALUE CAN BE SET HERE';
@@ -122,15 +121,22 @@ var formID = null;
  	}
 
  	if(status === 'input') {
- 		trueValueInputString += optionSetStorage + '</select>';
- 		falseValueInputString += optionSetStorage + '</select>';
- 		$('#skipLogicTrueView').append(trueValueInputString);
- 		$('#skipLogicFalseView').append(falseValueInputString);
+ 		if(optionSetStorage != '') {
+ 			inputOutputString = valueInputField + equalsOptionSet + optionSetStorage + '</select><br />' + greaterOptionSet + optionSetStorage + '</select><br />' + lessOptionSet + optionSetStorage + '</select>';
+ 			falseInputString += optionSetStorage + '</select>';
+ 		}
+ 		else {
+ 			inputOutputString = 'NO VALUE CAN BE SET HERE';
+ 			falseInputString = 'NO VALUE CAN BE SET HERE';
+ 		}
+ 		
+ 		$('#skipLogicTrueView').append(inputOutputString);
+ 		$('#skipLogicFalseView').append(falseInputString);
  	}
  	else {
  		trueValueOptionSetString += optionSetStorage + '</select>';
  		$('#skipLogicTrueView').append(trueValueOptionSetString);
- 		$('#skipLogicFalseView').append(falseValueOptionSetString);
+ 		$('#skipLogicFalseView').append('OptionSets-value can NEVER be empty!');
  	}
  	$('#buttons').append('<center><input type="button" class="btn btn-success" id="submit" value="Save data" /><input type="button" class="btn btn-danger" id="reset" value="Remove rule" /></center>');
 
@@ -139,12 +145,40 @@ var formID = null;
  	}
 
  	document.getElementById('submit').onclick = function() {
- 		var selectedTrueInput = document.getElementById("inputTrue").selectedIndex;
- 		var allTrueInputs = document.getElementById("inputTrue").options;
- 		var valueSelected = allTrueInputs[selectedTrueInput].value;
+ 		if(status === 'input') {
+ 			var valueToCheck = document.getElementById("valueInputField").value;
+ 			var equalsOptionSetTrue = document.getElementById("equalsOptionSet").selectedIndex;
+ 			var allEqualsOptionSet = document.getElementById("equalsOptionSet").options;
+ 			var equalValueSelected = allEqualsOptionSet[equalsOptionSetTrue].value;
 
- 		if(valueSelected === "submitButton") {
- 			alert('HAHAH');
+ 			var greaterOptionSetTrue = document.getElementById("greaterOptionSet").selectedIndex;
+ 			var allGreaterOptionSet = document.getElementById("greaterOptionSet").options;
+ 			var greaterValueSelected = allGreaterOptionSet[greaterOptionSetTrue].value;
+
+ 			var lessOptionSetTrue = document.getElementById("lessOptionSet").selectedIndex;
+ 			var allLessOptionSet = document.getElementById("lessOptionSet").options;
+ 			var lessValueSelected = allLessOptionSet[lessOptionSetTrue].value;
+
+ 			var falseOptionSet = document.getElementById("falseInputField").selectedIndex;
+ 			var allFalseOptionSet = document.getElementById("falseInputField").options;
+ 			var falseValueSelected = allFalseOptionSet[falseOptionSet].value;
+
+ 			skipLogicArray[positionOfElement].true.value = valueToCheck;
+ 			skipLogicArray[positionOfElement].true.equal.id = equalValueSelected;
+ 			skipLogicArray[positionOfElement].true.greater.id = greaterValueSelected;
+ 			skipLogicArray[positionOfElement].true.less.id = lessValueSelected;
+ 			skipLogicArray[positionOfElement].false = falseValueSelected;
+ 			
+ 			// parse
+ 		}
+ 		else {
+ 			var trueOptionSet = document.getElementById("optionSetTrue").selectedIndex;
+ 			var allTrueOptionSet = document.getElementById("optionSetTrue").options;
+ 			var trueValueSelected = allTrueOptionSet[trueOptionSet].value;
+ 			
+ 			skipLogicArray[positionOfElement].next = trueValueSelected;
+
+ 			// parse
  		}
  	}
  }
