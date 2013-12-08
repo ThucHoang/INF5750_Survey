@@ -41,8 +41,8 @@
  		}
  		else {
  			$('#userInformation').append(json.organisationUnits[i-1].name + '.');
- 		}
- 		$('#userInformation').append('<br/></b>');
+ 		
+} 		$('#userInformation').append('<br/></b>');
  	}
  	getNumberOfProgramsWithAccess();
  }
@@ -80,7 +80,7 @@
 
  function getDataAboutMe(json) {
  	$('#detailedInfo').empty();
- 	$('#detailedInfo').append('<br/><h2>User information:</h2>');
+ 	$('#detailedInfo').append('<br/><h3>User information:</h3>');
 
  	$('#jobTitleData').text(json.jobTitle);
  	$('#introductionData').append(json.introduction);
