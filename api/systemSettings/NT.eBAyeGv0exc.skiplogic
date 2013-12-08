@@ -1,11 +1,50 @@
 {
 	"programID":"eBAyeGv0exc",
 	"programStageDataElements":[
-	{"name":"Age","id":"qrur9Dvnyt5","type":"input","true":{"greater":{"id":null},"less":{"id":null},"equal":{"id":null},"next":{"id":null}},"false":"oZg33kd9taw"},
-	{"name":"Gender","id":"oZg33kd9taw","type":"optionset","true":{"greater":{"id":null},"less":{"id":null},"equal":{"id":null},"next":{"id":null}}, "false":null},
-	{"name":"Admission Date","id":"eMyVanycQSC","type":"input","true":{"greater":{"id":null},"less":{"id":null},"equal":{"id":null},"next":{"id":null}},"false":null},
-	{"name":"Discharge Date","id":"msodh3rEMJa","type":"input","true":{"greater":{"id":null},"less":{"id":null},"equal":{"id":null},"next":{"id":null}},"false":null},
-	{"name":"Mode of Discharge","id":"fWIAEtYVEGk","type":"optionset","true":{"greater":{"id":null},"less":{"id":null},"equal":{"id":null},"next":{"id":null}},"false":null},
-	{"name":"Diagnosis (ICD-10)","id":"K6uUAvq500H","type":"optionset","true":{"greater":{"id":null},"less":{"id":null},"equal":{"id":null},"next":{"id":null}},"false":null}
-	]
-}
+	{
+		"name":"Age","id":"qrur9Dvnyt5","type":"input",
+		"true" :{
+			"greater":{"id":null},
+			"less":{"id":null},
+			"equal":{"value": "20", "id":null}},
+		"next":null,
+		"false":"oZg33kd9taw"
+	},
+	{
+		"name":"Gender","id":"oZg33kd9taw","type":"optionset",
+		"true":{
+			"greater":{"id":null},
+			"less":{"id":null},
+			"equal":{"value": null, "id":null}},
+		"next":null, 
+		"false":null
+	},
+	{
+		"name":"Admission Date","id":"eMyVanycQSC","type":"input",
+		"true":{
+			"greater":{"id":null},
+			"less":{"id":null},
+			"equal":{"value":null ,"id":null}},
+		"next":{"id":null},
+		"false":null
+	},
+	{
+		"name":"Discharge Date","id":"msodh3rEMJa","type":"input",
+		"true":{"greater":{"id":null},"less":{"id":null},"equal":{"value":null, "id":null}},
+		"next":{"id":null},
+		"false":null
+	},
+	{
+		"name":"Mode of Discharge","id":"fWIAEtYVEGk","type":"optionset",
+		"true":{"greater":{"id":null},"less":{"id":null},"equal":{"value":null ,"id":null}},
+		"next":{"id":null},
+		"false":null
+	},
+	{
+		"name":"Diagnosis (ICD-10)","id":"K6uUAvq500H","type":"optionset",
+		"true":{"greater":{"id":null},"less":{"id":null},"equal":{"value":null ,"id":null}},
+		"next":{"id":null},
+		"false":null
+	}
+	]}
+
