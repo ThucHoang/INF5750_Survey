@@ -1,13 +1,13 @@
 {
-	"version": "0.3",
+	"version": "0.9",
 	"name": "N.T.K Survey",
 	"description": "A webapp created by group N.T.K!",
 	"installs_allowed_from" : [ "*"],
 	"launch_path": "/index.html",
 	"icons": {
-        "16": "/img/net_logo.png",
-        "48": "/img/net_logo.png",
-        "128": "/img/net_logo.png"
+        "16": "/img/ntk_logo.png",
+        "48": "/img/ntk_logo.png",
+        "128": "/img/ntk_logo.png"
     },
 	"developer": {
 		"name": "N.T.K",
