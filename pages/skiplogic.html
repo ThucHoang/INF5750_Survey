@@ -4,22 +4,22 @@
 	<title>Skip Logic</title>
 </head>
 <body>
+
 	<div id="skipLogicStatus"></div>
-	<div class="btn-group">
+	<div class="btn-group" id="programs">
 		<form role="form">
 			<label>Select program:</label> <select id="programSelect"></select>
 		</form>
 	</div>
-	<div class="row">
+	<div class="row" id="all">
 		<div class="col-md-4" id="skipLogicView"></div>
-		<div class="col-md-4"><form class="form-horizontal" role="form" id="skipLogicTrueView"></form></div>
-		<div class="col-md-4"><form class="form-horizontal" role="form" id="skipLogicFalseView"></form></div>
+		<div class="col-md-4" id="skipLogicTrueView"></div>
+		<div class="col-md-4" id="skipLogicFalseView"></div>
 	</div>	
 	<div class="row">
 		<div class="col-md-4"></div>
 		<div class="col-md-8" id="buttons"></div>
 	</div>
-	
 
 	<!-- Our own JS files -->
 	<script src="js/hostcheck.js"></script>
