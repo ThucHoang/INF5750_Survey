@@ -90,6 +90,10 @@ var formID = null;
  	var falseValueOptionSetString = '<b>OptionSets-value can NEVER be empty!</b>';
  	var status = '';
  	var positionOfElement = null;
+ 	var optionSetStorage = '';
+ 	var equalsOptionSet = '';
+ 	var greaterOptionSet = '';
+ 	var lessOptionSet = '';
 
  	for(var i = 0; i < skipLogicArray.length; i++) {
  		if(skipLogicArray[i].id === currentElement) {
@@ -99,20 +103,15 @@ var formID = null;
  		}
  	}
  	
- 	for(var x = 0; x < skipLogicArray.length; x++) {
+ 	for(var x = positionOfElement; x < skipLogicArray.length; x++) {
  		if(skipLogicArray[x].true != null) {
- 			if(skipLogicArray[x].id != currentElement && x > positionOfElement) {
- 				if(status == 'input') {
- 					trueValueInputString += '<option value="' + skipLogicArray[x].id + '">' + skipLogicArray[x].name + '</option>';
- 					falseValueInputString += '<option value="' + skipLogicArray[x].id + '">' + skipLogicArray[x].name + '</option>';
- 				} 
- 				else {
- 					trueValueOptionSetString += '<option value="' + skipLogicArray[x].id + '">' + skipLogicArray[x].name + '</option>';
- 				}
+ 			if(skipLogicArray[x].id != currentElement) {
+ 				optionSetStorage += '<option value="' + skipLogicArray[x].id + '">' + skipLogicArray[x].name + '</option>';
  			}
  		}
  		if((x+1 === skipLogicArray.length) && (skipLogicArray[x].id == currentElement)) {
  			if(status === 'input') {
+ 				optionSetStorage = '';
  				trueValueInputString = 'NO VALUE CAN BE SET HERE';
  				falseValueInputString = 'NO VALUE CAN BE SET HERE';
  			}
@@ -123,10 +122,13 @@ var formID = null;
  	}
 
  	if(status === 'input') {
+ 		trueValueInputString += optionSetStorage + '</select>';
+ 		falseValueInputString += optionSetStorage + '</select>';
  		$('#skipLogicTrueView').append(trueValueInputString);
  		$('#skipLogicFalseView').append(falseValueInputString);
  	}
  	else {
+ 		trueValueOptionSetString += optionSetStorage + '</select>';
  		$('#skipLogicTrueView').append(trueValueOptionSetString);
  		$('#skipLogicFalseView').append(falseValueOptionSetString);
  	}
@@ -137,7 +139,13 @@ var formID = null;
  	}
 
  	document.getElementById('submit').onclick = function() {
- 		console.log("submit baby!");
+ 		var selectedTrueInput = document.getElementById("inputTrue").selectedIndex;
+ 		var allTrueInputs = document.getElementById("inputTrue").options;
+ 		var valueSelected = allTrueInputs[selectedTrueInput].value;
+
+ 		if(valueSelected === "submitButton") {
+ 			alert('HAHAH');
+ 		}
  	}
  }
 
