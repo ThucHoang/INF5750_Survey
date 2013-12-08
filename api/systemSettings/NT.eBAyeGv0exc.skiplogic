@@ -6,8 +6,7 @@
 		"id": "qrur9Dvnyt5",
 		"category": "input",
 		"type": "int",
-		"true" :{
-<<<<<<< HEAD
+		"true" : {
 			"greater": {
 			"id": null
 			},
@@ -27,7 +26,7 @@
 		"id": "oZg33kd9taw",
 		"category": "optionset",
 		"type": null,
-		"true" :{
+		"true" : {
 			"greater": {
 			"id": null
 			},
@@ -41,22 +40,6 @@
 		},
 		"next": null,
 		"false": null
-=======
-			"greater":{"id":"K6uUAvq500H"},
-			"less":{"id":"msodh3rEMJa"},
-			"equal":{"value": "20", "id":"oZg33kd9taw"}},
-		"next":null,
-		"false":"eMyVanycQSC"
-	},
-	{
-		"name":"Gender","id":"oZg33kd9taw","type":"optionset",
-		"true":{
-			"greater":{"id":null},
-			"less":{"id":null},
-			"equal":{"value": null, "id":null}},
-		"next":"eMyVanycQSC", 
-		"false":null
->>>>>>> 5f11b4b2c4cc4c6df1686d42a6c732873368462e
 	},
 	{
 		"name": "Admission Date",
