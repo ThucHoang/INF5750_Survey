@@ -110,7 +110,6 @@ var found = false;
  	skipLogicArray = [];
  	$('#skipLogicStatus').empty();
  	$('#skipLogicView').empty();
- 	$('#buttons').empty();
  	var dataElementsString = "";
  	var url = getHost() + '/api/systemSettings/NT.' + formID + '.skiplogic';
 
@@ -132,7 +131,13 @@ var found = false;
  			});
  			dataElementsString += '</select>';
  			$('#skipLogicView').append(dataElementsString);
- 			retrieveTrueFalseValues();
+ 			console.log(document.getElementById('skipLogicView'));
+ 			$('#allDataElements').change(function() {
+ 				$('#skipLogicTrueView').empty();
+ 				$('#skipLogicFalseView').empty();
+ 				$('#trueView').empty();
+ 				retrieveTrueFalseValues();
+ 			}); 
  		}
  	}).error(function(data) {
  		found = false;
@@ -161,7 +166,7 @@ var found = false;
  			}
  		}
 
- 		var valueInputField = '<label>Value</label>: <input type="number" id="valueInputField" value="' + skipLogicArray[positionOfElement].true.value + '" /><br />';
+ 		var valueInputField = '<label>Value</label>: <input type="' + skipLogicArray[positionOfElement].type + '" id="valueInputField" value="' + skipLogicArray[positionOfElement].true.value + '" /><br />';
  		var equalsOptionSet = '<label>Equal</label>: <select id="equalsOptionSet"><option value="submitButton">Submit button</option>';
  		var greaterOptionSet = '<label>Greater</label>: <select id="greaterOptionSet"><option value="submitButton">Submit button</option>';
  		var lessOptionSet = '<label>Less</label>: <select id="lessOptionSet"><option value="submitButton">Submit button</option>';
@@ -274,18 +279,39 @@ var found = false;
  				else {
  					skipLogicArray[positionOfElement].true.value = null;
  				}
- 				skipLogicArray[positionOfElement].true.equal.id = equalValueSelected;
- 				skipLogicArray[positionOfElement].true.greater.id = greaterValueSelected;
- 				skipLogicArray[positionOfElement].true.less.id = lessValueSelected;
- 				skipLogicArray[positionOfElement].false = falseValueSelected;
 
+ 				if(equalValueSelected != "submitButton") {
+ 					skipLogicArray[positionOfElement].true.equal.id = equalValueSelected;
+ 				}
+ 				else {
+ 					skipLogicArray[positionOfElement].true.equal.id = null;
+ 				}
+ 				
+ 				if(greaterValueSelected != "submitButton") {
+ 					skipLogicArray[positionOfElement].true.greater.id = greaterValueSelected;
+ 				}
+ 				else {
+ 					skipLogicArray[positionOfElement].true.greater.id = null;
+ 				}
+
+ 				if(lessValueSelected != "submitButton") {
+ 					skipLogicArray[positionOfElement].true.less.id = lessValueSelected;
+ 				}
+ 				else {
+ 					skipLogicArray[positionOfElement].true.less.id = null;
+ 				}
+
+ 				if(falseValueSelected != "submitButton") {
+ 					skipLogicArray[positionOfElement].false = falseValueSelected;
+ 				}
+ 				else {
+ 					skipLogicArray[positionOfElement].false = null;
+ 				}
+ 				
  				//$('#troll').empty();
  				//$('#skipLogicStatus').empty();
  				//$('#troll').append('<center>Please wait while the skip-logic data are getting saved!</center>');
- 				sendFormData(JSON.stringify(skipLogicArray));
-
- 				//console.log(JSON.stringify(skipLogicArray));
- 				reloadSkipLogicArray();
+ 				createSettings(skipLogicArray);
  			}
  			else {
  				var trueOptionSet = document.getElementById("optionSetTrue").selectedIndex;
@@ -294,17 +320,18 @@ var found = false;
 
  				skipLogicArray[positionOfElement].next = trueValueSelected;
  				$('#skipLogicView').append('<center>Please wait while the skip-logic data are getting saved!</center>');
- 				sendFormData(JSON.stringify(skipLogicArray));
-
- 				//console.log(JSON.stringify(skipLogicArray));
- 				
+ 				createSettings(skipLogicArray);
  			}
  		}
  	}
- 	else {
- 		console.log("LOL");
- 	// Kennet sin del her <3
- }
+}
+function createSettings(json){
+	var tmp = {
+		"programID": formID,
+		"programStageDataElements":  json
+	};
+	console.log(tmp);
+	sendFormData(JSON.stringify(tmp));
 }
 
 function sendFormData(info) {
@@ -313,85 +340,87 @@ function sendFormData(info) {
 	$.ajax({
 		type: "POST",
 		url: url,
-		data: info
+		data: info,
+		contentType: 'text/plain',
 	}).success(function(xhr, textStatus, errorThrown) {
-		console.log("MUHAAHAHA " + textStatus);
-		//$('#troll').load("pages/skiplogic.html");
 		$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>The skip-logic rule has been saved!</center></div>');
-
+		$('#skipLogicTrueView').empty();
+		$('#skipLogicFalseView').empty();
+		$('#buttons').empty();
+		reloadSkipLogicArray();
 	}).error(function(xhr, textStatus, errorThrown) {
 		console.log("OH...");
 		$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A problem has occured while saving the skip-logic rule. Please contact an administrator!</center></div>');
 	});
 }
- function createEmtpySkipLogicSettings(id){
- 	var length; 
- 	var tmp = {};
- 	tmp["programID"] = id;
- 	tmp["programStageDataElements"] = [];
- 	$.ajax({
- 		url: getHost() + '/api/programs/' + id + '.json',
- 		contentType: 'application/json',
- 		dataType: 'json'
- 	}).success(function(data){
- 		$.ajax({
- 			url: getHost() + '/api/programStages/'+ data.programStages[0].id + '.json',
- 			contentType: 'application/json',
- 			dataType: 'json'
- 		}).success(function(data){
- 			length = data.programStageDataElements.length;
- 			$.each(data.programStageDataElements, function(index, value){
- 				
- 				$.ajax({
- 					url: getHost() + '/api/dataElements/'+ value.dataElement.id + '.json',
- 					contentType: 'application/json',
- 					dataType: 'json'
- 				}).success(function(data){
- 					addDataElementToObject(data, index);
- 				});
- 			});
+function createEmtpySkipLogicSettings(id){
+	var length; 
+	var tmp = {};
+	tmp["programID"] = id;
+	tmp["programStageDataElements"] = [];
+	$.ajax({
+		url: getHost() + '/api/programs/' + id + '.json',
+		contentType: 'application/json',
+		dataType: 'json'
+	}).success(function(data){
+		$.ajax({
+			url: getHost() + '/api/programStages/'+ data.programStages[0].id + '.json',
+			contentType: 'application/json',
+			dataType: 'json'
+		}).success(function(data){
+			length = data.programStageDataElements.length;
+			$.each(data.programStageDataElements, function(index, value){
+
+				$.ajax({
+					url: getHost() + '/api/dataElements/'+ value.dataElement.id + '.json',
+					contentType: 'application/json',
+					dataType: 'json'
+				}).success(function(data){
+					addDataElementToObject(data, index);
+				});
+			});
  			//console.log(tmp);
  		}).error(function(data){});
- 	})
- 	.error(function(data){
+	})
+	.error(function(data){
 
- 	});
+	});
 
- 	function addDataElementToObject(data, index){
- 		console.log(data);
- 		console.log(index);
- 		var element = {
- 			"name": data.name,
- 			"id": data.id
- 		};
- 		if(data.optionSet === null){
- 			element["category"] = "input";
- 			if(data.type === "int"){
- 				element["type"] = "int";
- 			}
- 			else if(data.type === "string"){
- 				element["type"] = "text";
- 			}
- 			else if(data.type === "date"){
- 				element["type"] = "date";
- 			}
- 		}
- 		else{
- 			element["category"] = "optionset";
- 			element["type"] = null;
+	function addDataElementToObject(data, index){
+		console.log(data);
+		console.log(index);
+		var element = {
+			"name": data.name,
+			"id": data.id
+		};
+		if(data.optionSet === null){
+			element["category"] = "input";
+			if(data.type === "int"){
+				element["type"] = "int";
+			}
+			else if(data.type === "string"){
+				element["type"] = "text";
+			}
+			else if(data.type === "date"){
+				element["type"] = "date";
+			}
+		}
+		else{
+			element["category"] = "optionset";
+			element["type"] = null;
 
- 		}
- 		element["true"] = {
- 				"value": null,
- 				"greater": {"id": null},
- 				"less": {"id": null},
- 				"equal": {"id": null}
- 			};
- 			element["false"] = null;
- 			element["next"] = null;
- 		console.log(element);
- 		tmp.programStageDataElements[index] = element;
- 		if(tmp.programStageDataElements.length == length){
+		}
+		element["true"] = {
+			"value": null,
+			"greater": {"id": null},
+			"less": {"id": null},
+			"equal": {"id": null}
+		};
+		element["false"] = null;
+		element["next"] = null;
+		console.log(element);
+		tmp.programStageDataElements[index] = element;
+		if(tmp.programStageDataElements.length == length){
  			//console.log(JSON.stringify(tmp));
  			sendFormData(JSON.stringify(tmp));
  		}
