@@ -1,7 +1,8 @@
 /*
- * Created by Thuc Hoang and Nguyen Cong Nguyen
+ * Created by Thuc Hoang and Nguyen Cong Nguyen and Kennet Vuong
  */
 
+ /*One big issue will be if someone define the skipLogicSettings WRONG*/
  // Global variables
  var dataElementArray = []; // All other dataelements
  var skipLogicArray = [];//SkipLogicArray Settings
@@ -193,7 +194,6 @@
  */
  function appendEventDate() {
  	$('#eventDate').append('<p></p><label>Date of the event<sup><font color="red">*</font></sup></label>: <input type="text" id="formElement" class="form-control" name="eventDate"  value="' + new Date().toJSON().slice(0, 10) + '" aria-required="true" required /><p></p>');
- 	currentElement = "eventDate";
  }
 
 /*
@@ -243,6 +243,7 @@
  				else {
  					orgUnitId = orgUnitID;
  					appendEventDate();
+ 					currentElement = "eventDate";
  				}
  			}
  			//SecondCheck: 
@@ -267,6 +268,27 @@
  				}
  			}
  			else{//skiplogicpart
+ 				var slObject = getObject(currentElement);
+ 				console.log(slObject);
+ 				if(slObject === undefined || slObject === null){
+ 					console.log("WTF MAN? ");
+ 				}
+ 				else{
+ 					if(slObject.category === "input"){
+ 						var checkCurr = checkCurrentElement(currentElement);
+ 					}
+ 					else if(slObject.category === "optionset"){
+ 						if(slObject.next === null){
+ 							showSubmitButton();
+ 						}
+ 						else{
+ 							getElementInfo(slObject.id);
+ 						}
+ 					}
+ 				}
+ 				//1. Check input 
+ 				//2. Check rule if it should show null or not
+ 				//3. Show rule
  				//checkIfNoMoreTrueElements();
  				//checkInputWithSkipLogic();
  			}
@@ -275,6 +297,35 @@
  		console.log("DATA ARRAY ERROR");
  	});
  }
+
+ function getObject(id){
+ 	console.log(id);
+ 	$.each(skipLogicArray, function(index, value){
+ 		console.log(value);
+
+ 		if(value.id === id){
+ 			return value;
+ 		}
+ 	});
+ 		console.log("Done each");
+ 	return null
+ }
+/* Check if currentElement have value or not
+* Returns true if currentElement contains text
+*/
+
+function checkCurrentElement(id){
+	var check = false;
+
+	//var element = document.getElementsByName(currentElement)
+	var element = document.getElementByName(currentElement)[0].value;
+	console.log(element);
+
+
+
+}
+
+//returns Type of id its either input or optionset
 
 /*
  * If skiplogic are present, this function will be activated and skiplogic will be retrieved
