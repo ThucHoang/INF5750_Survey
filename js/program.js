@@ -291,7 +291,7 @@
  							showSubmitButton();
  						}
  						else{
- 							getElementInfo(slObject.next);
+ 							getDataElementInfo(slObject.next);
  							currentElement = slObject.next;
  						}
  					}
@@ -333,15 +333,19 @@ function getNextId(type, check, slObject){
 		
 	}
 	else if(type === "text"){
-		var value = document.getElementByName(slObject.id)[0].value.toString();
+		var value = document.getElementsByName(slObject.id)[0].value.toString();
 		var obValue = slObject.true.value;
 		//If NB! triple compare or double compare? 
 		if(value === obValue){
 			return slObject.true.equal.id;
 		}
+		else {
+			return slObject.false;
+		}
 	}
 	else if(type === "date"){
 		console.log("Ignore");
+		return null;
  		//To be fixed later.
  	}
  }

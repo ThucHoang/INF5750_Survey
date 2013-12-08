@@ -1,0 +1,52 @@
+{
+	"programID":"jZUNKbHHFJS",
+	"programStageDataElements":[
+	{"name":"Name","id":"oIgIfmJX4t4","category":"input", "type":"text",
+	"true":{
+			"value": "Martin",
+			"greater": {
+			"id": null
+			},
+			"less": {
+			"id": null
+			},
+			"equal": {
+			"id": "oZg33kd9taw"
+			}
+		},
+	"next": null,
+	"false": "qrur9Dvnyt5"},
+	{
+		"name": "Age",
+		"id": "qrur9Dvnyt5",
+		"category": "input",
+		"type": "int",
+		"true" : {
+			"value": "20",
+			"greater": {
+			"id": "msodh3rEMJa"
+			},
+			"less": {
+			"id": "K6uUAvq500H"
+			},
+			"equal": {
+			"id": "eMyVanycQSC"
+			}
+		},
+		"next": null,
+		"false": "oZg33kd9taw"
+	},
+	{"name":"Gender","id":"oZg33kd9taw","category": "optionset",
+		"type": null,
+	"true":{
+		"value": null,
+		"greater": {"id": null},
+		"less": {"id": null},
+		"equal": {"id": null}
+		},
+	"next": null,
+	"false":null}
+
+
+	]
+}
