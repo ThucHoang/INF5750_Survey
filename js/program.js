@@ -269,20 +269,30 @@
  			}
  			else{//skiplogicpart
  				var slObject = getObject(currentElement);
- 				console.log(slObject);
+ 				//console.log(slObject);
  				if(slObject === undefined || slObject === null){
  					console.log("WTF MAN? ");
  				}
  				else{
  					if(slObject.category === "input"){
  						var checkCurr = checkCurrentElement(currentElement);
+ 						var nextId = getNextId(slObject.type, checkCurr, slObject);
+ 						if(nextId === null){
+ 							showSubmitButton();
+ 						}
+ 						else{
+ 							appendNext(nextId);
+ 							currentElement = nextId;
+ 						}
+ 						
  					}
  					else if(slObject.category === "optionset"){
  						if(slObject.next === null){
  							showSubmitButton();
  						}
  						else{
- 							getElementInfo(slObject.id);
+ 							getElementInfo(slObject.next);
+ 							currentElement = slObject.next;
  						}
  					}
  				}
@@ -298,17 +308,57 @@
  	});
  }
 
- function getObject(id){
- 	console.log(id);
- 	$.each(skipLogicArray, function(index, value){
- 		console.log(value);
+//Returns 
+function getNextId(type, check, slObject){
+	console.log(type);
+	console.log(check);
+	console.log(slObject);
+	if(check === false){
+		return slObject.false;
+	}
+	else if(type === "int"){
+		//Convert to string
+		var value = document.getElementsByName(slObject.id)[0].value;
+		var obValue = parseInt(slObject.true.value);
+		if(obValue == value){
+			return slObject.true.equal.id;
+		}
+		else if(value > obValue){
+			return slObject.true.greater.id;
+		}
+		else{
+			return slObject.true.less.id;
+		}
 
- 		if(value.id === id){
+		
+	}
+	else if(type === "text"){
+		var value = document.getElementByName(slObject.id)[0].value.toString();
+		var obValue = slObject.true.value;
+		//If NB! triple compare or double compare? 
+		if(value === obValue){
+			return slObject.true.equal.id;
+		}
+	}
+	else if(type === "date"){
+		console.log("Ignore");
+ 		//To be fixed later.
+ 	}
+ }
+ //Append/show the next form based on id
+ function appendNext(id){
+ 	getDataElementInfo(id);
+ }
+ function getObject(id){
+ 	for(var i = 0; i < skipLogicArray.length; i++){
+ 		var value = skipLogicArray[i];
+ 		if(value.id == id){
  			return value;
  		}
- 	});
- 		console.log("Done each");
+ 	}
+ 	console.log("Done each");
  	return null
+
  }
 /* Check if currentElement have value or not
 * Returns true if currentElement contains text
@@ -318,11 +368,14 @@ function checkCurrentElement(id){
 	var check = false;
 
 	//var element = document.getElementsByName(currentElement)
-	var element = document.getElementByName(currentElement)[0].value;
-	console.log(element);
+	var element = document.getElementsByName(currentElement)[0].value;
 
-
-
+	if(element == "" || element == undefined || element == null){
+		return false;
+	}
+	else{
+		return true;		
+	}
 }
 
 //returns Type of id its either input or optionset

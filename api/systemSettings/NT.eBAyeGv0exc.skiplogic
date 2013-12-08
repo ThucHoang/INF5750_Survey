@@ -7,15 +7,15 @@
 		"category": "input",
 		"type": "int",
 		"true" : {
+			"value": "20",
 			"greater": {
-			"id": null
+			"id": "msodh3rEMJa"
 			},
 			"less": {
-			"id": null
+			"id": "K6uUAvq500H"
 			},
 			"equal": {
-			"value": "20",
-			"id": null
+			"id": "eMyVanycQSC"
 			}
 		},
 		"next": null,
@@ -27,6 +27,7 @@
 		"category": "optionset",
 		"type": null,
 		"true" : {
+			"value": null,
 			"greater": {
 			"id": null
 			},
@@ -34,7 +35,6 @@
 			"id": null
 			},
 			"equal": {
-			"value": null,
 			"id": null
 			}
 		},
@@ -47,6 +47,7 @@
 		"category": "input",
 		"type": "date",
 		"true" :{
+			"value": null,
 			"greater": {
 			"id": null
 			},
@@ -54,7 +55,6 @@
 			"id": null
 			},
 			"equal": {
-			"value": null,
 			"id": null
 			}
 		},
@@ -66,6 +66,7 @@
 		"category": "input",
 		"type": "date",
 		"true" :{
+			"value": null,
 			"greater": {
 			"id": null
 			},
@@ -73,7 +74,6 @@
 			"id": null
 			},
 			"equal": {
-			"value": null,
 			"id": null
 			}
 		},
@@ -85,6 +85,7 @@
 		"category": "optionset",
 		"type": null,
 		"true" :{
+			"value": null,
 			"greater": {
 			"id": null
 			},
@@ -92,7 +93,6 @@
 			"id": null
 			},
 			"equal": {
-			"value": null,
 			"id": null
 			}
 		},
@@ -104,6 +104,7 @@
 		"category": "optionset",
 		"type": null,
 		"true" :{
+			"value": null,
 			"greater": {
 			"id": null
 			},
@@ -111,7 +112,6 @@
 			"id": null
 			},
 			"equal": {
-			"value": null,
 			"id": null
 			}
 		},
