@@ -44,13 +44,14 @@
  		
 } 		$('#userInformation').append('<br/></b>');
  	}
- 	getNumberOfProgramsWithAccess();
+ 	//getNumberOfProgramsWithAccess();
+ 	fillEventTable();
  }
 
 /*
  * Retrieves the number of programs the user can access
  */
- function getNumberOfProgramsWithAccess() {
+ /*function getNumberOfProgramsWithAccess() {
  	var url = getHost() + '/api/programs.json';
  	var singleEvent = 0;
  	var multiEvent = 0;
@@ -76,14 +77,87 @@
  	}).error(function(data) {
  		console.log("ERROR WITH # of programs");
  	});
- }
+ }*/
 
  function getDataAboutMe(json) {
- 	$('#detailedInfo').empty();
+ 	/*$('#detailedInfo').empty();
  	$('#detailedInfo').append('<br/><h3>User information:</h3>');
 
  	$('#jobTitleData').text(json.jobTitle);
  	$('#introductionData').append(json.introduction);
  	$('#emailData').append(json.email);
- 	$('#birthdayData').append(json.birthday);
+ 	$('#birthdayData').append(json.birthday);*/
+
+ 	$('#detailedInfo').append('<br/><h3>User information:</h3>');
+	var table = document.getElementById("userTable");
+ 	var row = table.insertRow(0);
+ 	var cell1 = row.insertCell(0);
+ 	var cell2 = row.insertCell(1);
+
+ 	cell1.innerHTML = "Job title:"
+ 	cell2.innerHTML = json.jobTitle;
+
+ 	row = table.insertRow(1);
+ 	cell1 = row.insertCell(0);
+ 	cell2 = row.insertCell(1);
+
+ 	cell1.innerHTML = "Introduction:";
+ 	cell2.innerHTML = json.introduction;
+
+ 	row = table.insertRow(1);
+ 	cell1 = row.insertCell(0);
+ 	cell2 = row.insertCell(1);
+
+ 	cell1.innerHTML = "Email:";
+ 	cell2.innerHTML = json.email;
+
+ 	row = table.insertRow(1);
+ 	cell1 = row.insertCell(0);
+ 	cell2 = row.insertCell(1);
+
+ 	cell1.innerHTML = "Day of birth:";
+ 	cell2.innerHTML = json.birthday;
+ }
+
+function fillEventTable() {
+ 	var url = getHost() + '/api/programs.json';
+ 	var table = document.getElementById("programTable");
+ 	var row = table.insertRow(0);
+ 	var cell1 = row.insertCell(0);
+ 	var cell2 = row.insertCell(1);
+ 	var singleEvent = 0;
+ 	var multiEvent = 0;
+
+ 	cell1.innerHTML = "<b>Events</b>";
+ 	cell2.innerHTML = "<b>Type</b>";
+ 	
+ 	$.ajax({
+ 		url: url,
+ 		contentType: 'application/json',
+ 		dataType: 'json'
+ 	}).success(function(data) {
+ 		var length = data.programs.length;
+
+ 		$('#programsInfo').append('<h3>You have access to ' + length + ' programs:</h3>');
+ 		
+ 		for(var i = 0; i < length; i++){
+ 			var name = data.programs[i].name;
+ 			row = table.insertRow(i+1);
+ 			cell1 = row.insertCell(0);
+ 			cell2 = row.insertCell(1);
+
+ 			cell1.innerHTML = name;
+ 			if(data.programs[i].type == 3) {
+ 				cell2.innerHTML = "Single event";
+ 				singleEvent++;
+ 			}
+ 			else {
+ 				cell2.innerHTML = "Multi event";
+ 				multiEvent++;
+ 			}
+ 		}
+ 		
+ 	}).error(function(data) {
+ 		console.log("ERROR WITH # of programs");
+ 	});
  }
