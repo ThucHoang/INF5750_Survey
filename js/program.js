@@ -346,6 +346,7 @@ function getNextId(type, check, slObject){
 	else if(type === "date"){
 		console.log("Ignore");
 		return null;
+		//Maybe return next? or what should we do here? or create equal fast? handle it as text.
  		//To be fixed later.
  	}
  }
