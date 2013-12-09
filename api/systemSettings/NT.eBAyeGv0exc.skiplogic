@@ -47,7 +47,7 @@
 		"category": "input",
 		"type": "date",
 		"true" :{
-			"value": null,
+			"value": "2013-12-09",
 			"greater": {
 			"id": null
 			},
@@ -55,11 +55,11 @@
 			"id": null
 			},
 			"equal": {
-			"id": null
+			"id": "msodh3rEMJa"
 			}
 		},
 		"next":null,
-		"false": null
+		"false": "K6uUAvq500H"
 	},
 	{
 		"name": "Discharge Date",

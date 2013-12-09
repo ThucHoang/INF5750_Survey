@@ -193,7 +193,7 @@
  * Adding the date of event
  */
  function appendEventDate() {
- 	$('#eventDate').append('<p></p><label>Date of the event<sup><font color="red">*</font></sup></label>: <input type="text" id="formElement" class="form-control" name="eventDate"  value="' + new Date().toJSON().slice(0, 10) + '" aria-required="true" required /><p></p>');
+ 	$('#eventDate').append('<p></p><label>Date of the event<sup><font color="red">*</font></sup></label>: <input type="date" id="formElement" class="form-control" name="eventDate"  value="' + new Date().toJSON().slice(0, 10) + '" aria-required="true" required /><p></p>');
  }
 
 /*
@@ -344,6 +344,15 @@ function getNextId(type, check, slObject){
 		}
 	}
 	else if(type === "date"){
+		var value = document.getElementsByName(slObject.id)[0].value.toString();
+		var obValue = slObject.true.value;
+		//Date format has to be YYYY-MM-DD
+		if(value === obValue){
+			return slObject.true.equal.id;
+		}
+		else{
+			return slObject.false;
+		}
 		console.log("Ignore");
 		return null;
 		//Maybe return next? or what should we do here? or create equal fast? handle it as text.
@@ -493,7 +502,7 @@ function checkCurrentElement(id){
  		$('#' + json.id).append('<label>' + json.name + '</label>: <input type="number" id="' + json.id + '-id" class="form-control" name="' + json.id + '"/><p></p>');
  	}
  	else if(json.type == "date" && json.numberType == "number") {
- 		$('#' + json.id).append('<p></p><label>' + json.name + '</label>: <input type="text" id="' + json.id + '-id" class="form-control" name="' + json.id + '""  value="' + new Date().toJSON().slice(0, 10) + '"/><p></p>');
+ 		$('#' + json.id).append('<p></p><label>' + json.name + '</label>: <input type="date" id="' + json.id + '-id" class="form-control" name="' + json.id + '""  value="' + new Date().toJSON().slice(0, 10) + '"/><p></p>');
  	}
  	else {
  		$('#skipLogicAlert').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>An error has occured! Please tell the admin!</center>');
