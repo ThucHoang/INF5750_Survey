@@ -371,6 +371,7 @@ var found = false;
  	});
  }
  function createEmtpySkipLogicSettings(id) {
+ 	var i = 0;
  	var length; 
  	var tmp = {};
  	tmp["programID"] = id;
@@ -403,6 +404,7 @@ var found = false;
  	});
 
  	function addDataElementToObject(data, index) {
+ 		i++;
  		console.log(data);
  		console.log(index);
  		var element = {
@@ -436,7 +438,7 @@ var found = false;
  		element["next"] = null;
  		console.log(element);
  		tmp.programStageDataElements[index] = element;
- 		if(tmp.programStageDataElements.length == length) {
+ 		if(i  === length-1) {
  			sendFormData(JSON.stringify(tmp));
  		}
  	}
