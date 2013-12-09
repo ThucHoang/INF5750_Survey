@@ -2,7 +2,7 @@
  * Created by Thuc Hoang, Nguyen Cong Nguyen and Kennet Vuong
  */
 
- /*One big issue will be if someone define the skipLogicSettings WRONG*/
+ /*One big issue will be if someone define the skipLogicSettings WRONG, or not? Have to verify the settings somehow*/
  // Global variables
  var dataElementArray = []; // All other dataelements
  var skipLogicArray = [];//SkipLogicArray Settings
