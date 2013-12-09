@@ -40,6 +40,7 @@ var found = false;
  	skipLogicArray = [];
  	$('#skipLogicStatus').empty();
  	$('#skipLogicView').empty();
+ 	found = false;
  	var selectedProgram = document.getElementById("programSelect").selectedIndex;
  	var allPrograms = document.getElementById("programSelect").options;
  	var url = getHost() + '/api/systemSettings/NT.' + allPrograms[selectedProgram].value + '.skiplogic';
@@ -235,8 +236,15 @@ var found = false;
 
  		if(status === 'input') {
  			if(equalOptionSetStorage != '' || greaterOptionSetStorage != '' || lessOptionSetStorage != '' || falseOptionSetStorage != '' || trueOptionSetStorage != '') {
- 				inputOutputString = valueInputField + equalsOptionSet + equalOptionSetStorage + '</select><br />' + greaterOptionSet + greaterOptionSetStorage + '</select><br />' + lessOptionSet + lessOptionSetStorage + '</select>';
+ 				if(skipLogicArray[positionOfElement].type === "int") {
+ 					inputOutputString = valueInputField + equalsOptionSet + equalOptionSetStorage + '</select><br />' + greaterOptionSet + greaterOptionSetStorage + '</select><br />' + lessOptionSet + lessOptionSetStorage + '</select>';
+ 					falseInputString += falseOptionSetStorage + '</select>';
+ 				}
+ 				else {
+ 					inputOutputString = valueInputField + equalsOptionSet + equalOptionSetStorage + '</select>';
  				falseInputString += falseOptionSetStorage + '</select>';
+ 				}
+ 				
  			}
  			else {
  				inputOutputString = 'NO VALUE CAN BE SET HERE<br />Submit button will be shown as default.';
@@ -307,10 +315,6 @@ var found = false;
  				else {
  					skipLogicArray[positionOfElement].false = null;
  				}
- 				
- 				//$('#troll').empty();
- 				//$('#skipLogicStatus').empty();
- 				//$('#troll').append('<center>Please wait while the skip-logic data are getting saved!</center>');
  				createSettings(skipLogicArray);
  			}
  			else {
@@ -324,104 +328,102 @@ var found = false;
  			}
  		}
  	}
-}
-function createSettings(json){
-	var tmp = {
-		"programID": formID,
-		"programStageDataElements":  json
-	};
-	console.log(tmp);
-	sendFormData(JSON.stringify(tmp));
-}
+ }
+ function createSettings(json) {
+ 	var tmp = {
+ 		"programID": formID,
+ 		"programStageDataElements":  json
+ 	};
+ 	sendFormData(JSON.stringify(tmp));
+ }
 
-function sendFormData(info) {
-	var url = getHost() + '/api/systemSettings/NT.' + formID + '.skiplogic';
-	console.log(url);
-	$.ajax({
-		type: "POST",
-		url: url,
-		data: info,
-		contentType: 'text/plain',
-	}).success(function(xhr, textStatus, errorThrown) {
-		$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>The skip-logic rule has been saved!</center></div>');
-		$('#skipLogicTrueView').empty();
-		$('#skipLogicFalseView').empty();
-		$('#buttons').empty();
-		reloadSkipLogicArray();
-	}).error(function(xhr, textStatus, errorThrown) {
-		console.log("OH...");
-		$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A problem has occured while saving the skip-logic rule. Please contact an administrator!</center></div>');
-	});
-}
-function createEmtpySkipLogicSettings(id){
-	var length; 
-	var tmp = {};
-	tmp["programID"] = id;
-	tmp["programStageDataElements"] = [];
-	$.ajax({
-		url: getHost() + '/api/programs/' + id + '.json',
-		contentType: 'application/json',
-		dataType: 'json'
-	}).success(function(data){
-		$.ajax({
-			url: getHost() + '/api/programStages/'+ data.programStages[0].id + '.json',
-			contentType: 'application/json',
-			dataType: 'json'
-		}).success(function(data){
-			length = data.programStageDataElements.length;
-			$.each(data.programStageDataElements, function(index, value){
+ function sendFormData(info) {
+ 	console.log(info);
+ 	var url = getHost() + '/api/systemSettings/NT.' + formID + '.skiplogic';
+ 	console.log(url);
+ 	$.ajax({
+ 		type: "POST",
+ 		url: url,
+ 		data: info,
+ 		contentType: 'text/plain',
+ 	}).success(function(xhr, textStatus, errorThrown) {
+ 		$('#skipLogicStatus').append('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>The skip-logic rule has been saved!</center></div>');
+ 		$('#skipLogicTrueView').empty();
+ 		$('#skipLogicFalseView').empty();
+ 		$('#buttons').empty();
+ 		reloadSkipLogicArray();
+ 	}).error(function(xhr, textStatus, errorThrown) {
+ 		console.log("OH...");
+ 		$('#skipLogicStatus').append('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><center>A problem has occured while saving the skip-logic rule. Please contact an administrator!</center></div>');
+ 	});
+ }
+ function createEmtpySkipLogicSettings(id) {
+ 	var length; 
+ 	var tmp = {};
+ 	tmp["programID"] = id;
+ 	tmp["programStageDataElements"] = [];
+ 	$.ajax({
+ 		url: getHost() + '/api/programs/' + id + '.json',
+ 		contentType: 'application/json',
+ 		dataType: 'json'
+ 	}).success(function(data) {
+ 		$.ajax({
+ 			url: getHost() + '/api/programStages/'+ data.programStages[0].id + '.json',
+ 			contentType: 'application/json',
+ 			dataType: 'json'
+ 		}).success(function(data) {
+ 			length = data.programStageDataElements.length;
+ 			$.each(data.programStageDataElements, function(index, value) {
 
-				$.ajax({
-					url: getHost() + '/api/dataElements/'+ value.dataElement.id + '.json',
-					contentType: 'application/json',
-					dataType: 'json'
-				}).success(function(data){
-					addDataElementToObject(data, index);
-				});
-			});
- 			//console.log(tmp);
+ 				$.ajax({
+ 					url: getHost() + '/api/dataElements/'+ value.dataElement.id + '.json',
+ 					contentType: 'application/json',
+ 					dataType: 'json'
+ 				}).success(function(data){
+ 					addDataElementToObject(data, index);
+ 				});
+ 			});
  		}).error(function(data){});
-	})
-	.error(function(data){
+ 	})
+ 	.error(function(data){
 
-	});
+ 	});
 
-	function addDataElementToObject(data, index){
-		console.log(data);
-		console.log(index);
-		var element = {
-			"name": data.name,
-			"id": data.id
-		};
-		if(data.optionSet === null){
-			element["category"] = "input";
-			if(data.type === "int"){
-				element["type"] = "int";
-			}
-			else if(data.type === "string"){
-				element["type"] = "text";
-			}
-			else if(data.type === "date"){
-				element["type"] = "date";
-			}
-		}
-		else{
-			element["category"] = "optionset";
-			element["type"] = null;
+ 	function addDataElementToObject(data, index) {
+ 		console.log(data);
+ 		console.log(index);
+ 		var element = {
+ 			"name": data.name,
+ 			"id": data.id
+ 		};
+ 		if(data.optionSet === null){
+ 			element["category"] = "input";
+ 			if(data.type === "int"){
+ 				element["type"] = "int";
+ 			}
+ 			else if(data.type === "string") {
+ 				element["type"] = "text";
+ 			}
+ 			else if(data.type === "date") {
+ 				element["type"] = "date";
+ 			}
+ 		}
+ 		else{
+ 			element["category"] = "optionset";
+ 			element["type"] = null;
 
-		}
-		element["true"] = {
-			"value": null,
-			"greater": {"id": null},
-			"less": {"id": null},
-			"equal": {"id": null}
-		};
-		element["false"] = null;
-		element["next"] = null;
-		console.log(element);
-		tmp.programStageDataElements[index] = element;
-		if(tmp.programStageDataElements.length == length){
- 			//console.log(JSON.stringify(tmp));
+ 		}
+ 		element["true"] = {
+ 			"value": null,
+ 			"greater": {"id": null},
+ 			"less": {"id": null},
+ 			"equal": {"id": null}
+ 		};
+ 		element["false"] = null;
+ 		element["next"] = null;
+ 		console.log(element);
+ 		tmp.programStageDataElements[index] = element;
+ 		if(tmp.programStageDataElements.length == length) {
  			sendFormData(JSON.stringify(tmp));
  		}
  	}
