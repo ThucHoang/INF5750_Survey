@@ -1,5 +1,5 @@
 /*
- * Created by Thuc Hoang and Nguyen Cong Nguyen
+ * Created by Thuc Hoang, Nguyen Cong Nguyen and Kennet Vuong
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * Created by Thuc Hoang and Nguyen Cong Nguyen and Kennet Vuong
+ * Created by Thuc Hoang, Nguyen Cong Nguyen and Kennet Vuong
  */
 
  /*One big issue will be if someone define the skipLogicSettings WRONG*/
