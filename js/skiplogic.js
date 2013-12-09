@@ -44,7 +44,7 @@ var found = false;
  	var selectedProgram = document.getElementById("programSelect").selectedIndex;
  	var allPrograms = document.getElementById("programSelect").options;
  	var url = getHost() + '/api/systemSettings/NT.' + allPrograms[selectedProgram].value + '.skiplogic';
- 	var dataElementsString = "";
+ 	var dataElementsString = '<label>Select dataElement</label>:<br />';
  	formID = allPrograms[selectedProgram].value;
 
  	if(selectedProgram != 0) {
@@ -111,7 +111,7 @@ var found = false;
  	skipLogicArray = [];
  	$('#skipLogicStatus').empty();
  	$('#skipLogicView').empty();
- 	var dataElementsString = "";
+ 	var dataElementsString = '<label>Select dataElement</label>: ';
  	var url = getHost() + '/api/systemSettings/NT.' + formID + '.skiplogic';
 
  	$.ajax({
@@ -167,7 +167,13 @@ var found = false;
  			}
  		}
 
- 		var valueInputField = '<label>Value</label>: <input type="' + skipLogicArray[positionOfElement].type + '" id="valueInputField" value="' + skipLogicArray[positionOfElement].true.value + '" /><br />';
+ 		var valueInputField = '<label>Value</label>: <input type="' + skipLogicArray[positionOfElement].type + '" id="valueInputField" ';
+ 		if(skipLogicArray[positionOfElement].value === null) {
+ 			valueInputField += 'value="" /><br />';
+ 		}
+ 		else {
+ 			valueInputField += 'value="' + skipLogicArray[positionOfElement].true.value + '" /><br />';
+ 		}
  		var equalsOptionSet = '<label>Equal</label>: <select id="equalsOptionSet"><option value="submitButton">Submit button</option>';
  		var greaterOptionSet = '<label>Greater</label>: <select id="greaterOptionSet"><option value="submitButton">Submit button</option>';
  		var lessOptionSet = '<label>Less</label>: <select id="lessOptionSet"><option value="submitButton">Submit button</option>';
@@ -242,7 +248,7 @@ var found = false;
  				}
  				else {
  					inputOutputString = valueInputField + equalsOptionSet + equalOptionSetStorage + '</select>';
- 				falseInputString += falseOptionSetStorage + '</select>';
+ 					falseInputString += falseOptionSetStorage + '</select>';
  				}
  				
  			}
@@ -264,19 +270,21 @@ var found = false;
 
  		document.getElementById('submit').onclick = function() {
  			if(status === 'input') {
+
  				var valueToCheck = document.getElementById("valueInputField").value;
  				var equalsOptionSetTrue = document.getElementById("equalsOptionSet").selectedIndex;
  				var allEqualsOptionSet = document.getElementById("equalsOptionSet").options;
  				var equalValueSelected = allEqualsOptionSet[equalsOptionSetTrue].value;
+ 				if(skipLogicArray[positionOfElement].type === "int") {
+ 					var greaterOptionSetTrue = document.getElementById("greaterOptionSet").selectedIndex;
+ 					var allGreaterOptionSet = document.getElementById("greaterOptionSet").options;
+ 					var greaterValueSelected = allGreaterOptionSet[greaterOptionSetTrue].value;
 
- 				var greaterOptionSetTrue = document.getElementById("greaterOptionSet").selectedIndex;
- 				var allGreaterOptionSet = document.getElementById("greaterOptionSet").options;
- 				var greaterValueSelected = allGreaterOptionSet[greaterOptionSetTrue].value;
+ 					var lessOptionSetTrue = document.getElementById("lessOptionSet").selectedIndex;
+ 					var allLessOptionSet = document.getElementById("lessOptionSet").options;
+ 					var lessValueSelected = allLessOptionSet[lessOptionSetTrue].value;
 
- 				var lessOptionSetTrue = document.getElementById("lessOptionSet").selectedIndex;
- 				var allLessOptionSet = document.getElementById("lessOptionSet").options;
- 				var lessValueSelected = allLessOptionSet[lessOptionSetTrue].value;
-
+ 				}
  				var falseOptionSet = document.getElementById("falseInputField").selectedIndex;
  				var allFalseOptionSet = document.getElementById("falseInputField").options;
  				var falseValueSelected = allFalseOptionSet[falseOptionSet].value;
@@ -322,7 +330,12 @@ var found = false;
  				var allTrueOptionSet = document.getElementById("optionSetTrue").options;
  				var trueValueSelected = allTrueOptionSet[trueOptionSet].value;
 
- 				skipLogicArray[positionOfElement].next = trueValueSelected;
+ 				if(trueValueSelected === "submitButton") {
+ 					skipLogicArray[positionOfElement].next = null;
+ 				}
+ 				else {
+ 					skipLogicArray[positionOfElement].next = trueValueSelected;
+ 				}
  				$('#skipLogicView').append('<center>Please wait while the skip-logic data are getting saved!</center>');
  				createSettings(skipLogicArray);
  			}
