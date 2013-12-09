@@ -174,7 +174,6 @@ var found = false;
  		else {
  			valueInputField += 'value="' + skipLogicArray[positionOfElement].true.value + '" /><br />';
  		}
- 		console.log(valueInputField);
  		var equalsOptionSet = '<label>Equal</label>: <select id="equalsOptionSet"><option value="submitButton">Submit button</option>';
  		var greaterOptionSet = '<label>Greater</label>: <select id="greaterOptionSet"><option value="submitButton">Submit button</option>';
  		var lessOptionSet = '<label>Less</label>: <select id="lessOptionSet"><option value="submitButton">Submit button</option>';
@@ -406,8 +405,8 @@ var found = false;
 
  	function addDataElementToObject(data, index) {
  		i++;
- 		console.log(data);
- 		console.log(index);
+ 		//console.log(data);
+ 		//console.log(index);
  		var element = {
  			"name": data.name,
  			"id": data.id
@@ -439,9 +438,12 @@ var found = false;
  		element["next"] = null;
  		console.log(element);
  		tmp.programStageDataElements[index] = element;
- 		if(i  === length-1) {
+ 		if(i  === length) {
+ 			//console.log(i);
+ 			//console.log(length);
  			sendFormData(JSON.stringify(tmp));
- 		}
+ 			//console.log(JSON.stringify(tmp));
+  		}
  	}
  	//console.log(tmp);
  }
