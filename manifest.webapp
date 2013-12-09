@@ -1,5 +1,5 @@
 {
-	"version": "0.9",
+	"version": "1.0",
 	"name": "N.T.K Survey",
 	"description": "A webapp created by group N.T.K!",
 	"installs_allowed_from" : [ "*"],

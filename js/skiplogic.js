@@ -252,7 +252,7 @@ var found = false;
  			$('#skipLogicTrueView').append(trueValueOptionSetString);
  			$('#skipLogicFalseView').append('OptionSets-value can NEVER be empty!');
  		}
- 		$('#buttons').append('<center><input type="button" class="btn btn-success" id="submit" value="Save data" /></center>');
+ 		$('#buttons').append('<center><input type="button" class="btn btn-success pull-left" id="submit" value="Save data" /></center>');
 
  		document.getElementById('submit').onclick = function() {
  			if(status === 'input') {
