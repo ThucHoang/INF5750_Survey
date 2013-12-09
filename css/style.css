@@ -1,0 +1,15 @@
+body {
+	margin-bottom: 50px;
+}
+
+.navbar-static-top {
+	margin-bottom: 19px;
+}
+.fixed{
+	position: fixed;
+	top:0;
+	}
+.main{
+	
+	margin-top: 20px;
+}
