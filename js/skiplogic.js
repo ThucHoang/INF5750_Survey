@@ -168,12 +168,13 @@ var found = false;
  		}
 
  		var valueInputField = '<label>Value</label>: <input type="' + skipLogicArray[positionOfElement].type + '" id="valueInputField" ';
- 		if(skipLogicArray[positionOfElement].value === null) {
+ 		if(skipLogicArray[positionOfElement].true.value === null) {
  			valueInputField += 'value="" /><br />';
  		}
  		else {
  			valueInputField += 'value="' + skipLogicArray[positionOfElement].true.value + '" /><br />';
  		}
+ 		console.log(valueInputField);
  		var equalsOptionSet = '<label>Equal</label>: <select id="equalsOptionSet"><option value="submitButton">Submit button</option>';
  		var greaterOptionSet = '<label>Greater</label>: <select id="greaterOptionSet"><option value="submitButton">Submit button</option>';
  		var lessOptionSet = '<label>Less</label>: <select id="lessOptionSet"><option value="submitButton">Submit button</option>';
