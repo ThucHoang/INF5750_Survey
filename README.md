@@ -13,5 +13,7 @@ This web app was created for the DHIS2 (http://www.dhis2.com) project, where the
 
 ##Authors
 [Nguyen Cong Nguyen](https://github.com/nguyencn)
+
 [Thuc Hoang](https://github.com/ThucHoang)
+
 [Kennet Vuong](https://github.com/knyyy)
